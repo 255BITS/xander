@@ -11,16 +11,16 @@ Multivariate Testing made easy.
 ## API
 
 * Options wrapped in tags
-```html
-  <section data-variants="buttons">
-    <button data-variant='green' class='green'>
-    </button>
-    <button data-variant="red" class='red'>
-    </button>
-    <button data-variant="blue" class='blue'>
-    </button>
-  </section>
-```
+  ```html
+    <section data-variants="buttons">
+      <button data-variant='green' class='green'>
+      </button>
+      <button data-variant="red" class='red'>
+      </button>
+      <button data-variant="blue" class='blue'>
+      </button>
+    </section>
+  ```
 
 ## Usage
 
