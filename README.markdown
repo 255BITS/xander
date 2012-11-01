@@ -15,7 +15,7 @@ Multivariate Testing made easy.
 
 ## Installation
 
-* 
+* Include xander-client javascript file
 
 ## Usage
 
@@ -31,7 +31,6 @@ Multivariate Testing made easy.
       </section>
     ```
 
-* Include xander-client javascript file
 * Initially hide all elements that are data-variants.
 
 
