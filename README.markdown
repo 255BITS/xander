@@ -25,12 +25,8 @@ Multivariate Testing made easy.
 ## Usage
 
 * Include a javascript file
-* if you append ?showVariants=true to the URL you can see the variant testing bar
-* Free during beta
+* Coming Soon: if you append ?showVariants=true to the URL you can see the variant testing bar
+* Free with Math.random().  90/10, ensured distribution, and Best Site Finder option in planning stages.
 
-## First Case
-
-* Post to HN with Xander testing his own landing page
-* 15.99 a month for > 50 users
 
 
