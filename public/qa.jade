@@ -1,0 +1,35 @@
+extends ../../../public/layout
+
+append head
+  link(href='/qa/qunit-1.10.0.css', rel='stylesheet', type='text/css')
+  script(type='text/javascript', src='xander-client.js')
+
+block body
+  .container
+    .row
+      .span12
+        h1 Xander Multivariate testing
+      .span12
+        #qunit
+    .row
+      .span12
+        h1 Test Data 
+          small feel free to ignore
+        section#test1(data-variants='test1')
+          section#a(data-variant='a').hide
+            p A
+          section#b(data-variant='b').hide
+            p B
+          section#c(data-variant='c').hide
+            p C
+
+        section#test2(data-variants='test1')
+          section#a(data-variant='a').hide
+            p A
+            #test2sub1(data-variants='test2sub1')
+              p(data-variant='1') 1
+              p(data-variant='2') 2
+
+
+  script(type='text/javascript', src='/qa/qunit-1.10.0.js')
+  script(type='text/javascript', src='qa.js?version=#{new Date().getTime()}')
