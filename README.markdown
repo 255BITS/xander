@@ -30,12 +30,10 @@ Multivariate Testing made easy.
         </button>
       </section>
     ```
-
 * Initially hide all elements that are data-variants.
-
+* Specify ?showVariants=true to your URL for a suprise!
 
 ## Future
-* Append ?showVariants=true to the URL you can see the variant testing bar
 * Free with Math.random().  90/10, ensured distribution, and Best Site Finder option in planning stages as services.
 
 # Related Work
