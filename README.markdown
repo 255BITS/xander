@@ -8,26 +8,36 @@ Multivariate Testing made easy.
 * Results should be available in Analytics
 * It should be easy to see all the variants
 
-## API
+## Library Requirements
 
-* Options wrapped in tags
-  ```html
-    <section data-variants="buttons">
-      <button data-variant='green' class='green'>
-      </button>
-      <button data-variant="red" class='red'>
-      </button>
-      <button data-variant="blue" class='blue'>
-      </button>
-    </section>
-  ```
+* Google Analytics
+* jQuery
+
+## Installation
+
+* 
 
 ## Usage
 
-* Include a javascript file
-* Coming Soon: if you append ?showVariants=true to the URL you can see the variant testing bar
-* Free with Math.random().  90/10, ensured distribution, and Best Site Finder option in planning stages.
+* Options wrapped in tags
+    ```html
+      <section data-variants="buttons">
+        <button data-variant='green' class='green'>
+        </button>
+        <button data-variant="red" class='red'>
+        </button>
+        <button data-variant="blue" class='blue'>
+        </button>
+      </section>
+    ```
 
+* Include xander-client javascript file
+* Initially hide all elements that are data-variants.
+
+
+## Future
+* Append ?showVariants=true to the URL you can see the variant testing bar
+* Free with Math.random().  90/10, ensured distribution, and Best Site Finder option in planning stages as services.
 
 # Related Work
 
