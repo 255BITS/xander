@@ -30,6 +30,7 @@ Multivariate Testing made easy.
         </button>
       </section>
     ```
+
 * Initially hide all elements that are data-variants.
 * Specify ?showVariants=true to your URL for a suprise!
 
