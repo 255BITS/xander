@@ -19,9 +19,11 @@ Multivariate Testing made easy.
 
 ## Usage
 
+### Multivariate testing for HTML elements 
+
 * Options wrapped in tags
     ```html
-      <section data-variants="buttons">
+      <section id="buttons">
         <button data-variant='green' class='green'>
         </button>
         <button data-variant="red" class='red'>
@@ -33,6 +35,17 @@ Multivariate Testing made easy.
 
 * Initially hide all elements that are data-variants.
 * Specify ?showVariants=true to your URL for a suprise!
+* Variation reports are based on root element id 
+
+### Multivariate testing for CSS classes
+
+* Add variant classes
+    ```html 
+      <section id='test3' data-css-variants="class1 class2" />
+    ```
+
+* One of the data-css-variants will be added as a class to your section.
+* Variation reports are based on ids 
 
 ## Future
 * Free with Math.random().  90/10, ensured distribution, and Best Site Finder option in planning stages as services.

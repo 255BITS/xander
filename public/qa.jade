@@ -5,7 +5,6 @@ head
   link(href='qunit-1.10.0.css', rel='stylesheet', type='text/css')
   script(type='text/javascript', src='jquery-1.8.1.min.js')
   script(type='text/javascript', src='/bootstrap/js/bootstrap.min.js')
-  script(type='text/javascript', src='qa.js')
   script(type='text/javascript', src='xander-client.js')
 
   script
@@ -35,7 +34,7 @@ body
       .span12
         h1 Test Data 
           small feel free to ignore
-        section#test1(data-variants='test1')
+        section#test1
           section#a(data-variant='a').hide
             p A
           section#b(data-variant='b').hide
@@ -43,13 +42,15 @@ body
           section#c(data-variant='c').hide
             p C
 
-        section#test2(data-variants='test2')
+
+        section#test2
           section#a(data-variant='a').hide
             p A
-            #test2sub1(data-variants='test2sub1')
+            #test2sub1
               p(data-variant='1') 1
               p(data-variant='2') 2
 
+        section#test3(data-css-variants="class1 class2")
   .xander
     img(src='xander.png')
 
