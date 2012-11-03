@@ -114,7 +114,9 @@ $(function() {
   xander.slot_number = xander.first_slot;
   xander.chooseVariant();
   xander.chooseCssVariant();
-  return xander.callAnalytics();
+  if (getParameterByName('showVariants') !== 'true') {
+    return xander.callAnalytics();
+  }
 });
 
 window.xander = xander;

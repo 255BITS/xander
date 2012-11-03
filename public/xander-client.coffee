@@ -83,7 +83,7 @@ $ ->
   xander.slot_number = xander.first_slot
   xander.chooseVariant()
   xander.chooseCssVariant()
-  xander.callAnalytics()
+  xander.callAnalytics() unless getParameterByName('showVariants') == 'true'
 
 window.xander = xander
 
