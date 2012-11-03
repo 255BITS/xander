@@ -30,7 +30,7 @@ XanderClient = (function() {
       variants = $(x).find("> [data-variant]");
       options = "";
       variants.each(function(i, y) {
-        return options += " <a onclick='xander.showVariant(\"" + ($(x).attr('id')) + "\",\"" + ($(y).attr('data-variant')) + "\")'>" + ($(y).attr('data-variant')) + "</a>";
+        return options += " <button onclick='xander.showVariant(\"" + ($(x).attr('id')) + "\",\"" + ($(y).attr('data-variant')) + "\"); return false'>" + ($(y).attr('data-variant')) + "</button>";
       });
       return $('#__variants').append("<div><span>" + ($(x).attr('id')) + "</span><span>" + options + "</span></div>");
     });

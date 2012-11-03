@@ -20,7 +20,7 @@ class XanderClient
       variants = $(x).find("> [data-variant]")
       options = ""
       variants.each (i, y) ->
-        options += " <a onclick='xander.showVariant(\"#{$(x).attr('id')}\",\"#{$(y).attr('data-variant')}\")'>#{$(y).attr('data-variant')}</a>"
+        options += " <button onclick='xander.showVariant(\"#{$(x).attr('id')}\",\"#{$(y).attr('data-variant')}\"); return false'>#{$(y).attr('data-variant')}</button>"
       
       $('#__variants').append("<div><span>#{$(x).attr('id')}</span><span>#{options}</span></div>")
 
