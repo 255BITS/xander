@@ -16,6 +16,7 @@ class XanderClient
       <div id='__variants' style='width: 100%; background: black; color: white; border-bottom: 5px solid #CCC'>
       </div>
 """
+    # Element variants
     $("*[data-variant]").parent().each (i, x) ->
       variants = $(x).find("> [data-variant]")
       options = ""
@@ -24,10 +25,26 @@ class XanderClient
       
       $('#__variants').append("<div><span>#{$(x).attr('id')}</span><span>#{options}</span></div>")
 
+    # CSS variants
+    $("*[data-css-variants]").each (i, x) ->
+      variants = $(x).attr('data-css-variants').split(' ')
+      options = ""
+      $(variants).each (i, y) ->
+        options += " <button onclick='xander.showCssVariant(\"#{$(x).attr('id')}\",\"#{y}\"); return false'>#{y}</button>"
+
+      $('#__variants').append("<div><span>#{$(x).attr('id')}</span><span>#{options}</span></div>")
+
   showVariant: (name, subname) ->
     variants = $("##{name}")
     $(variants).find("> [data-variant]").hide()
     variant = $(variants).find("> [data-variant='#{subname}']").show()
+
+  showCssVariant: (id, klass) ->
+    el = $("##{id}")
+    variants = el.attr('data-css-variants').split(' ')
+    $(variants).each (i, y) ->
+      el.removeClass y
+    el.addClass klass
 
   chooseVariant: ->
     all_choices = $("*[data-variant]").parent()

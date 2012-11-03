@@ -25,12 +25,21 @@ XanderClient = (function() {
   XanderClient.prototype.showVariantBar = function() {
     console.log("Show variant bar");
     $('body').prepend("<div id='__variants' style='width: 100%; background: black; color: white; border-bottom: 5px solid #CCC'>\n</div>");
-    return $("*[data-variant]").parent().each(function(i, x) {
+    $("*[data-variant]").parent().each(function(i, x) {
       var options, variants;
       variants = $(x).find("> [data-variant]");
       options = "";
       variants.each(function(i, y) {
         return options += " <button onclick='xander.showVariant(\"" + ($(x).attr('id')) + "\",\"" + ($(y).attr('data-variant')) + "\"); return false'>" + ($(y).attr('data-variant')) + "</button>";
+      });
+      return $('#__variants').append("<div><span>" + ($(x).attr('id')) + "</span><span>" + options + "</span></div>");
+    });
+    return $("*[data-css-variants]").each(function(i, x) {
+      var options, variants;
+      variants = $(x).attr('data-css-variants').split(' ');
+      options = "";
+      $(variants).each(function(i, y) {
+        return options += " <button onclick='xander.showCssVariant(\"" + ($(x).attr('id')) + "\",\"" + y + "\"); return false'>" + y + "</button>";
       });
       return $('#__variants').append("<div><span>" + ($(x).attr('id')) + "</span><span>" + options + "</span></div>");
     });
@@ -41,6 +50,16 @@ XanderClient = (function() {
     variants = $("#" + name);
     $(variants).find("> [data-variant]").hide();
     return variant = $(variants).find("> [data-variant='" + subname + "']").show();
+  };
+
+  XanderClient.prototype.showCssVariant = function(id, klass) {
+    var el, variants;
+    el = $("#" + id);
+    variants = el.attr('data-css-variants').split(' ');
+    $(variants).each(function(i, y) {
+      return el.removeClass(y);
+    });
+    return el.addClass(klass);
   };
 
   XanderClient.prototype.chooseVariant = function() {
