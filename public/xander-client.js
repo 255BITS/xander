@@ -18,9 +18,9 @@ XanderClient = (function() {
 
   function XanderClient() {}
 
-  first_slot = 0;
+  first_slot = 1;
 
-  slot_number = 0;
+  slot_number = 1;
 
   XanderClient.prototype.showVariantBar = function() {
     console.log("Show variant bar");
@@ -83,10 +83,12 @@ XanderClient = (function() {
     var all_choices;
     all_choices = $("*[data-css-variants]");
     return all_choices.each(function(i, x) {
-      var options;
+      var option, options;
       options = $(x).attr('data-css-variants').split(' ');
-      $(x).addClass(options[parseInt(Math.random() * options.length)]);
+      option = options[parseInt(Math.random() * options.length)];
+      $(x).addClass(option);
       $(x).show().attr('data-variant-slot', slot_number);
+      $(x).show().attr('data-variant-chosen', option);
       return slot_number += 1;
     });
   };

@@ -8,8 +8,8 @@ getParameterByName = (name) ->
 
 
 class XanderClient
-  first_slot = 0
-  slot_number = 0
+  first_slot = 1
+  slot_number = 1
   showVariantBar : ->
     console.log("Show variant bar")
     $('body').prepend """
@@ -62,8 +62,10 @@ class XanderClient
     all_choices = $("*[data-css-variants]")
     all_choices.each (i, x) ->
       options = $(x).attr('data-css-variants').split(' ')
-      $(x).addClass options[parseInt(Math.random() * options.length)]
+      option = options[parseInt(Math.random() * options.length)]
+      $(x).addClass option
       $(x).show().attr 'data-variant-slot', slot_number
+      $(x).show().attr 'data-variant-chosen', option
       slot_number += 1
 
   # Structure of each variant has both:

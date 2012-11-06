@@ -13,11 +13,12 @@ $ ->
     ok !($("#test3").hasClass("class1") && $("#test3").hasClass("class2")), "test3 has 2 variants!"
     ok ($("#test3").hasClass("class1") || $("#test3").hasClass("class2")), "test3 has no variants!"
   test "Ensuring proper slot order", ->
-    equal 0, $("#test1").attr('data-variant-slot'), "test1 issue"
-    equal 1, $("#test2").attr('data-variant-slot'), "test2 issue"
+    equal 1, $("#test1").attr('data-variant-slot'), "test1 issue"
+    equal 2, $("#test2").attr('data-variant-slot'), "test2 issue"
     ok $("#test3").attr('data-variant-slot') > 1, "test3 issue"
   test "Ensuring proper chosen variant name", ->
     ok $("#test1").attr('data-variant-chosen').length > 0, 'variant-chosen not populated'
+    ok $("#test3").attr('data-variant-chosen').length > 0, 'css-variant-chosen not populated'
 
     
 
