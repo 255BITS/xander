@@ -24,7 +24,7 @@ XanderClient = (function() {
 
   XanderClient.prototype.showVariantBar = function() {
     console.log("Show variant bar");
-    $('body').prepend("<div id='__variants' style='width: 100%; background: black; color: white; border-bottom: 5px solid #CCC'>\n</div>");
+    $('body').prepend("<div id='__variants' style='padding-left: 10%; width: 80%; background: black; color: white; border-bottom: 5px solid #CCC'>\n</div>");
     $("*[data-variant]").parent().each(function(i, x) {
       var options, variants;
       variants = $(x).find("> [data-variant]");
@@ -97,7 +97,7 @@ XanderClient = (function() {
       chosen = $(x).attr('data-variant-chosen');
       slot_number = $(x).attr('data-variant-slot');
       title = $(x).attr('id' || ("slot_" + slot_number));
-      return _gaq.push(['_setCustomVar', slot_number, title, chosen, 2]);
+      return _gaq.push(['_setCustomVar', parseInt(slot_number), title, chosen, 2]);
     });
   };
 
