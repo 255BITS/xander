@@ -78,6 +78,23 @@ class XanderClient
       title = $(x).attr 'id' || ("slot_"+slot_number)
       _gaq.push ['_setCustomVar', parseInt(slot_number), title,  chosen, 2 ] 
 
+  # This rerolls the page into any variant except the current one
+  # This is more useful for demo or testing than prod.
+  reroll : ->
+    @chooseVariant()
+    @chooseCssVariant()
+      
+
+  # Returns the current variant in JSON form
+  variant : ->
+    results = {}
+    $("*[data-variant-slot]").each (i, x) ->
+      chosen = $(x).attr('data-variant-chosen')
+      title = $(x).attr 'id' || ("slot_"+slot_number)
+      results[title]=chosen
+    results
+
+
 xander = new XanderClient()
 
 $ ->

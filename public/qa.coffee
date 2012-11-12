@@ -19,6 +19,13 @@ $ ->
   test "Ensuring proper chosen variant name", ->
     ok $("#test1").attr('data-variant-chosen').length > 0, 'variant-chosen not populated'
     ok $("#test3").attr('data-variant-chosen').length > 0, 'css-variant-chosen not populated'
+  test "Reroll always rerolls a different variant than the current one", ->
+    oldVariant = xander.variant()
+    xander.reroll()
+    anythingDifferent = false
+    for key, val of xander.variant()
+      anythingDifferent = anythingDifferent || oldVariant[key] != val
+    ok anythingDifferent, "something must be different!"
 
     
 

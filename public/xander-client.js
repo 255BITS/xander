@@ -103,6 +103,23 @@ XanderClient = (function() {
     });
   };
 
+  XanderClient.prototype.reroll = function() {
+    this.chooseVariant();
+    return this.chooseCssVariant();
+  };
+
+  XanderClient.prototype.variant = function() {
+    var results;
+    results = {};
+    $("*[data-variant-slot]").each(function(i, x) {
+      var chosen, title;
+      chosen = $(x).attr('data-variant-chosen');
+      title = $(x).attr('id' || ("slot_" + slot_number));
+      return results[title] = chosen;
+    });
+    return results;
+  };
+
   return XanderClient;
 
 })();
