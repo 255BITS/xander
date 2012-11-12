@@ -26,6 +26,9 @@ $ ->
     for key, val of xander.variant()
       anythingDifferent = anythingDifferent || oldVariant[key] != val
     ok anythingDifferent, "something must be different!"
-
-    
+  test "Reroll takes a target", ->
+    $target = $($("*[data-variant-slot]")[0])
+    chosen = $target.attr("data-variant-chosen")
+    xander.reroll($target)
+    ok $target.attr("data-variant-chosen") != chosen, "data-variant does not get updated on reroll target"
 

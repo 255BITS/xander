@@ -80,9 +80,24 @@ class XanderClient
 
   # This rerolls the page into any variant except the current one
   # This is more useful for demo or testing than prod.
-  reroll : ->
-    @chooseVariant()
-    @chooseCssVariant()
+  reroll : ($target) ->
+    if $target
+      chosen = $target.attr("data-variant-chosen")
+      variants = $target.find("> [data-variant]")
+      if variants.length > 1
+        variants.hide()
+        for variant, i in variants
+          if $(variant).attr('data-variant')==chosen
+            variants.splice i, 1
+            break
+        $chosen = $(variants[parseInt(Math.random() * variants.length)]).show()
+        $target.attr('data-variant-chosen', $chosen.attr('data-variant'))
+
+    else
+      @chooseVariant()
+      @chooseCssVariant()
+
+
       
 
   # Returns the current variant in JSON form

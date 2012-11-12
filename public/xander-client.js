@@ -103,9 +103,27 @@ XanderClient = (function() {
     });
   };
 
-  XanderClient.prototype.reroll = function() {
-    this.chooseVariant();
-    return this.chooseCssVariant();
+  XanderClient.prototype.reroll = function($target) {
+    var $chosen, chosen, i, variant, variants, _i, _len;
+    if ($target) {
+      chosen = $target.attr("data-variant-chosen");
+      variants = $target.find("> [data-variant]");
+      if (variants.length > 1) {
+        variants.hide();
+        for (i = _i = 0, _len = variants.length; _i < _len; i = ++_i) {
+          variant = variants[i];
+          if ($(variant).attr('data-variant') === chosen) {
+            variants.splice(i, 1);
+            break;
+          }
+        }
+        $chosen = $(variants[parseInt(Math.random() * variants.length)]).show();
+        return $target.attr('data-variant-chosen', $chosen.attr('data-variant'));
+      }
+    } else {
+      this.chooseVariant();
+      return this.chooseCssVariant();
+    }
   };
 
   XanderClient.prototype.variant = function() {
