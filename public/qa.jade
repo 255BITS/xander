@@ -61,6 +61,17 @@ body
               p(data-variant='2') 2
 
         section#test3(data-css-variants="class1 class2")
+
+        section#test4.hide
+          #nested1(data-css-variants='a b c')
+            #nested2(data-css-variants='a b c')
+              p#nested3null(data-css-variants)
+
+        section#test5.hide
+          section(data-test5=true)
+            p(data-variant='1') 1
+            p(data-variant='2') 2
+          section(data-css-variants='a b', data-test5-css=true)
   .xander
     img(src='xander.png')
 

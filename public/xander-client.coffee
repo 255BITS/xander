@@ -51,6 +51,11 @@ class XanderClient
     all_choices.each (i, x) ->
       variants = $(x).find("> [data-variant]")
       variants.hide()
+      # the user forgot to name the section or containing div
+      if !$(x).attr('id')
+        console.error("Could not find parent id for data-variant")
+        console.error x
+        return
       $(x).attr('data-variant-slot', slot_number)
       chosen = $(variants[parseInt(Math.random() * variants.length)]).show()
       $(x).attr('data-variant-chosen', chosen.attr('data-variant'))
@@ -61,6 +66,10 @@ class XanderClient
   chooseCssVariant: ->
     all_choices = $("*[data-css-variants]")
     all_choices.each (i, x) ->
+      if !$(x).attr('id')
+        console.error("data-css-variants element is missing id")
+        console.error($(x))
+        return
       options = $(x).attr('data-css-variants').split(' ')
       option = options[parseInt(Math.random() * options.length)]
       $(x).addClass option

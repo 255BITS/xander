@@ -69,6 +69,11 @@ XanderClient = (function() {
       var chosen, variants;
       variants = $(x).find("> [data-variant]");
       variants.hide();
+      if (!$(x).attr('id')) {
+        console.error("Could not find parent id for data-variant");
+        console.error(x);
+        return;
+      }
       $(x).attr('data-variant-slot', slot_number);
       chosen = $(variants[parseInt(Math.random() * variants.length)]).show();
       $(x).attr('data-variant-chosen', chosen.attr('data-variant'));
@@ -84,6 +89,11 @@ XanderClient = (function() {
     all_choices = $("*[data-css-variants]");
     return all_choices.each(function(i, x) {
       var option, options;
+      if (!$(x).attr('id')) {
+        console.error("data-css-variants element is missing id");
+        console.error($(x));
+        return;
+      }
       options = $(x).attr('data-css-variants').split(' ');
       option = options[parseInt(Math.random() * options.length)];
       $(x).addClass(option);
