@@ -91,7 +91,7 @@ XanderClient = (function() {
       var option, options;
       if (!$(x).attr('id')) {
         console.error("data-css-variants element is missing id");
-        console.error($(x));
+        console.error(x);
         return;
       }
       options = $(x).attr('data-css-variants').split(' ');

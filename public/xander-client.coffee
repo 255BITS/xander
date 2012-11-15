@@ -68,7 +68,7 @@ class XanderClient
     all_choices.each (i, x) ->
       if !$(x).attr('id')
         console.error("data-css-variants element is missing id")
-        console.error($(x))
+        console.error x
         return
       options = $(x).attr('data-css-variants').split(' ')
       option = options[parseInt(Math.random() * options.length)]
