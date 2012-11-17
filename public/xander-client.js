@@ -69,6 +69,11 @@ XanderClient = (function() {
       var chosen, variants;
       variants = $(x).find("> [data-variant]");
       variants.hide();
+      if (!$(x).attr('id')) {
+        console.error("Could not find parent id for data-variant");
+        console.error(x);
+        return;
+      }
       $(x).attr('data-variant-slot', slot_number);
       chosen = $(variants[parseInt(Math.random() * variants.length)]).show();
       $(x).attr('data-variant-chosen', chosen.attr('data-variant'));
@@ -84,6 +89,11 @@ XanderClient = (function() {
     all_choices = $("*[data-css-variants]");
     return all_choices.each(function(i, x) {
       var option, options;
+      if (!$(x).attr('id')) {
+        console.error("data-css-variants element is missing id");
+        console.error(x);
+        return;
+      }
       options = $(x).attr('data-css-variants').split(' ');
       option = options[parseInt(Math.random() * options.length)];
       $(x).addClass(option);
@@ -127,6 +137,41 @@ XanderClient = (function() {
       title = $(x).attr('id' || ("slot_" + slot_number));
       return _gaq.push(['_setCustomVar', parseInt(slot_number), title, chosen, 2]);
     });
+  };
+
+  XanderClient.prototype.reroll = function($target) {
+    var $chosen, chosen, i, variant, variants, _i, _len;
+    if ($target) {
+      chosen = $target.attr("data-variant-chosen");
+      variants = $target.find("> [data-variant]");
+      if (variants.length > 1) {
+        variants.hide();
+        for (i = _i = 0, _len = variants.length; _i < _len; i = ++_i) {
+          variant = variants[i];
+          if ($(variant).attr('data-variant') === chosen) {
+            variants.splice(i, 1);
+            break;
+          }
+        }
+        $chosen = $(variants[parseInt(Math.random() * variants.length)]).show();
+        return $target.attr('data-variant-chosen', $chosen.attr('data-variant'));
+      }
+    } else {
+      this.chooseVariant();
+      return this.chooseCssVariant();
+    }
+  };
+
+  XanderClient.prototype.variant = function() {
+    var results;
+    results = {};
+    $("*[data-variant-slot]").each(function(i, x) {
+      var chosen, title;
+      chosen = $(x).attr('data-variant-chosen');
+      title = $(x).attr('id' || ("slot_" + slot_number));
+      return results[title] = chosen;
+    });
+    return results;
   };
 
   return XanderClient;

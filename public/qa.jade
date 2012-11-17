@@ -63,13 +63,25 @@ body
 
         section#test3(data-css-variants="class1 class2")
         
-        section#test4
-          form(onsubmit='console.log("test4 goal"); return false')
-            input#test4btn(type='submit', data-goal='test4') Submit
 
-        form#test5form(data-goal='test5', onsubmit="return false")
+        section#test4.hide
+          #nested1(data-css-variants='a b c')
+            #nested2(data-css-variants='a b c')
+              p#nested3null(data-css-variants)
 
-        a#test6atag(data-goal='test6', onclick='return false')
+        section#test5.hide
+          section(data-test5=true)
+            p(data-variant='1') 1
+            p(data-variant='2') 2
+          section(data-css-variants='a b', data-test5-css=true)
+
+        section#test6
+          form(onsubmit='console.log("test6 goal"); return false')
+            input#test6btn(type='submit', data-goal='test6') Submit
+
+        form#test7form(data-goal='test7', onsubmit="return false")
+
+        a#test8atag(data-goal='test8', onclick='return false')
   .xander
     img(src='xander.png')
 

@@ -51,6 +51,11 @@ class XanderClient
     all_choices.each (i, x) ->
       variants = $(x).find("> [data-variant]")
       variants.hide()
+      # the user forgot to name the section or containing div
+      if !$(x).attr('id')
+        console.error("Could not find parent id for data-variant")
+        console.error x
+        return
       $(x).attr('data-variant-slot', slot_number)
       chosen = $(variants[parseInt(Math.random() * variants.length)]).show()
       $(x).attr('data-variant-chosen', chosen.attr('data-variant'))
@@ -61,6 +66,10 @@ class XanderClient
   chooseCssVariant: ->
     all_choices = $("*[data-css-variants]")
     all_choices.each (i, x) ->
+      if !$(x).attr('id')
+        console.error("data-css-variants element is missing id")
+        console.error x
+        return
       options = $(x).attr('data-css-variants').split(' ')
       option = options[parseInt(Math.random() * options.length)]
       $(x).addClass option
@@ -94,6 +103,38 @@ class XanderClient
       slot_number = $(x).attr('data-variant-slot')
       title = $(x).attr 'id' || ("slot_"+slot_number)
       _gaq.push ['_setCustomVar', parseInt(slot_number), title,  chosen, 2 ] 
+
+  # This rerolls the page into any variant except the current one
+  # This is more useful for demo or testing than prod.
+  reroll : ($target) ->
+    if $target
+      chosen = $target.attr("data-variant-chosen")
+      variants = $target.find("> [data-variant]")
+      if variants.length > 1
+        variants.hide()
+        for variant, i in variants
+          if $(variant).attr('data-variant')==chosen
+            variants.splice i, 1
+            break
+        $chosen = $(variants[parseInt(Math.random() * variants.length)]).show()
+        $target.attr('data-variant-chosen', $chosen.attr('data-variant'))
+
+    else
+      @chooseVariant()
+      @chooseCssVariant()
+
+
+      
+
+  # Returns the current variant in JSON form
+  variant : ->
+    results = {}
+    $("*[data-variant-slot]").each (i, x) ->
+      chosen = $(x).attr('data-variant-chosen')
+      title = $(x).attr 'id' || ("slot_"+slot_number)
+      results[title]=chosen
+    results
+
 
 xander = new XanderClient()
 
