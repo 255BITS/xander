@@ -68,6 +68,23 @@ class XanderClient
       $(x).show().attr 'data-variant-chosen', option
       slot_number += 1
 
+  wireGoals: ->
+    $("*[data-goal]").each (i, x) ->
+      x = $(x)
+      goal = x.attr('data-goal')
+      if(x.is("a") || (x.is("input") && x.attr('type') == 'submit' )) 
+        x.click ->
+          xander.goalReached(goal)
+      else if x.is("form")
+        x.submit ->
+          xander.goalReached(goal)
+      else
+        console?.error("[Xander] Error: no idea what to do with the goal defined on this element:", x)
+        console?.error( "Supported types are a tags, submit inputs, forms.  Please check http://xander.io for more information")
+
+  goalReached : (goal) ->
+    _gaq.push ['_trackPageview', goal]
+
   # Structure of each variant has both:
   #   data-variant-slot and data-variant-chosen (name)
   #   id is used to set the custom variable.
@@ -85,6 +102,7 @@ $ ->
   xander.slot_number = xander.first_slot
   xander.chooseVariant()
   xander.chooseCssVariant()
+  xander.wireGoals()
   xander.callAnalytics() unless getParameterByName('showVariants') == 'true'
 
 window.xander = xander

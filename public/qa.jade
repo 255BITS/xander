@@ -1,6 +1,7 @@
 !!! 5
 
 head
+  meta(charset='utf8')
   link(href='/bootstrap/css/bootstrap.min.css', rel='stylesheet', type='text/css')
   link(href='qunit-1.10.0.css', rel='stylesheet', type='text/css')
   script(type='text/javascript', src='jquery-1.8.1.min.js')
@@ -61,6 +62,14 @@ body
               p(data-variant='2') 2
 
         section#test3(data-css-variants="class1 class2")
+        
+        section#test4
+          form(onsubmit='console.log("test4 goal"); return false')
+            input#test4btn(type='submit', data-goal='test4') Submit
+
+        form#test5form(data-goal='test5', onsubmit="return false")
+
+        a#test6atag(data-goal='test6', onclick='return false')
   .xander
     img(src='xander.png')
 
