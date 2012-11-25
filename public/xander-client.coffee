@@ -72,6 +72,8 @@ class XanderClient
         return
       options = $(x).attr('data-css-variants').split(' ')
       option = options[parseInt(Math.random() * options.length)]
+      $(options).each (j, k) ->
+        $(x).removeClass k
       $(x).addClass option
       $(x).show().attr 'data-variant-slot', slot_number
       $(x).show().attr 'data-variant-chosen', option

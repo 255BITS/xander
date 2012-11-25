@@ -96,6 +96,9 @@ XanderClient = (function() {
       }
       options = $(x).attr('data-css-variants').split(' ');
       option = options[parseInt(Math.random() * options.length)];
+      $(options).each(function(j, k) {
+        return $(x).removeClass(k);
+      });
       $(x).addClass(option);
       $(x).show().attr('data-variant-slot', slot_number);
       $(x).show().attr('data-variant-chosen', option);
