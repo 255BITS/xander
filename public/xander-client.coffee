@@ -64,7 +64,7 @@ class XanderClient
       console?.log "You have too many variants to track!  Google Analytics limits the number of custom variable slots to 5."
 
   chooseCssVariant: ->
-    all_choices = $("*[data-css-variants]")
+    all_choices = $("[data-css-variants]")
     all_choices.each (i, x) ->
       if !$(x).attr('id')
         console.error("data-css-variants element is missing id")

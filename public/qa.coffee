@@ -33,10 +33,16 @@ $ ->
     ok anythingDifferent, "something must be different!"
 
   test "Reroll takes a target", ->
-    $target = $($("*[data-variant-slot]")[0])
+    $target = $($("[data-variant-slot]")[0])
     chosen = $target.attr("data-variant-chosen")
     xander.reroll($target)
     ok $target.attr("data-variant-chosen") != chosen, "data-variant does not get updated on reroll target"
+
+  test "Reroll works with data-css-variants", ->
+    $target = $($("[data-css-variants]")[0])
+    chosen = $target.attr("data-variant-chosen")
+    xander.reroll($target)
+    ok $target.attr("data-variant-chosen") != chosen, "data-css-variants does not get updated on reroll target"
 
   test "Nested data-css-variants", ->
     $obj = $("#nested1")
@@ -62,3 +68,4 @@ $ ->
     ok !$obj.is(':visible'), "unnamed sections should be hidden"
     ok !$obj.hasClass('a'), "unnamed sections should be hidden"
     ok !$obj.hasClass('b'), "unnamed sections should be hidden"
+
