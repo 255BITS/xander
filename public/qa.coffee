@@ -57,7 +57,9 @@ $ ->
   test "Reroll works with data-css-variants", ->
     $target = $($("[data-css-variants]")[0])
     chosen = $target.attr("data-variant-chosen")
+    ok $target.hasClass(chosen), "css variant does not have the correct class added."
     xander.reroll($target)
+    ok !$target.hasClass(chosen), "css variant has same class as before reroll"
     ok $target.attr("data-variant-chosen") != chosen, "data-css-variants does not get updated on reroll target"
 
   test "Nested data-css-variants", ->

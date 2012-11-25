@@ -120,7 +120,19 @@ class XanderClient
             break
         $chosen = $(variants[parseInt(Math.random() * variants.length)]).show()
         $target.attr('data-variant-chosen', $chosen.attr('data-variant'))
+      else 
+        variants = $target.attr("data-css-variants")?.split(' ')
+        if(variants?.length > 1)
+          for variant, i in variants
+            if $target.hasClass(variant)
+              variants.splice i, 1
+              $target.removeClass variant
+              break
+          chosen = variants[parseInt(Math.random() * variants.length)]
+          $target.addClass(chosen)
+          $target.attr('data-variant-chosen', chosen)
 
+          
     else
       @chooseVariant()
       @chooseCssVariant()

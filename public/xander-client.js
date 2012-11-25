@@ -86,7 +86,7 @@ XanderClient = (function() {
 
   XanderClient.prototype.chooseCssVariant = function() {
     var all_choices;
-    all_choices = $("*[data-css-variants]");
+    all_choices = $("[data-css-variants]");
     return all_choices.each(function(i, x) {
       var option, options;
       if (!$(x).attr('id')) {
@@ -143,7 +143,7 @@ XanderClient = (function() {
   };
 
   XanderClient.prototype.reroll = function($target) {
-    var $chosen, chosen, i, variant, variants, _i, _len;
+    var $chosen, chosen, i, variant, variants, _i, _j, _len, _len1, _ref;
     if ($target) {
       chosen = $target.attr("data-variant-chosen");
       variants = $target.find("> [data-variant]");
@@ -158,6 +158,21 @@ XanderClient = (function() {
         }
         $chosen = $(variants[parseInt(Math.random() * variants.length)]).show();
         return $target.attr('data-variant-chosen', $chosen.attr('data-variant'));
+      } else {
+        variants = (_ref = $target.attr("data-css-variants")) != null ? _ref.split(' ') : void 0;
+        if ((variants != null ? variants.length : void 0) > 1) {
+          for (i = _j = 0, _len1 = variants.length; _j < _len1; i = ++_j) {
+            variant = variants[i];
+            if ($target.hasClass(variant)) {
+              variants.splice(i, 1);
+              $target.removeClass(variant);
+              break;
+            }
+          }
+          chosen = variants[parseInt(Math.random() * variants.length)];
+          $target.addClass(chosen);
+          return $target.attr('data-variant-chosen', chosen);
+        }
       }
     } else {
       this.chooseVariant();
