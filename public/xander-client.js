@@ -96,11 +96,40 @@ XanderClient = (function() {
       }
       options = $(x).attr('data-css-variants').split(' ');
       option = options[parseInt(Math.random() * options.length)];
+      $(options).each(function(j, k) {
+        return $(x).removeClass(k);
+      });
       $(x).addClass(option);
       $(x).show().attr('data-variant-slot', slot_number);
       $(x).show().attr('data-variant-chosen', option);
       return slot_number += 1;
     });
+  };
+
+  XanderClient.prototype.wireGoals = function() {
+    return $("*[data-goal]").each(function(i, x) {
+      var goal;
+      x = $(x);
+      goal = x.attr('data-goal');
+      if (x.is("a") || (x.is("input") && x.attr('type') === 'submit')) {
+        return x.click(function() {
+          return xander.goalReached(goal);
+        });
+      } else if (x.is("form")) {
+        return x.submit(function() {
+          return xander.goalReached(goal);
+        });
+      } else {
+        if (typeof console !== "undefined" && console !== null) {
+          console.error("[Xander] Error: no idea what to do with the goal defined on this element:", x);
+        }
+        return typeof console !== "undefined" && console !== null ? console.error("Supported types are a tags, submit inputs, forms.  Please check http://xander.io for more information") : void 0;
+      }
+    });
+  };
+
+  XanderClient.prototype.goalReached = function(goal) {
+    return _gaq.push(['_trackPageview', goal]);
   };
 
   XanderClient.prototype.callAnalytics = function() {
@@ -161,6 +190,7 @@ $(function() {
   xander.slot_number = xander.first_slot;
   xander.chooseVariant();
   xander.chooseCssVariant();
+  xander.wireGoals();
   if (getParameterByName('showVariants') !== 'true') {
     return xander.callAnalytics();
   }

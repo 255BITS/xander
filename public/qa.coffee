@@ -24,6 +24,22 @@ $ ->
     ok $("#test1").attr('data-variant-chosen').length > 0, 'variant-chosen not populated'
     ok $("#test3").attr('data-variant-chosen').length > 0, 'css-variant-chosen not populated'
 
+  # Goals
+  test "Goals should be enabled on form button clicks", ->
+    $("#test6btn").click()
+    ok _gaq[_gaq.length-1][0] == "_trackPageview", "Wrong event type in _gaq for goal"
+    ok _gaq[_gaq.length-1][1] == "test6", "Wrong goal name in _gaq"
+  test "Goals should be enabled on form submits", ->
+    $("#test7form").submit()
+    ok _gaq[_gaq.length-1][0] == "_trackPageview", "Wrong event type in _gaq for goal"
+    ok _gaq[_gaq.length-1][1] == "test7", "Wrong goal name in _gaq"
+  test "Goals should be enabled on <a> tags", ->
+    $("#test8atag").click()
+    ok _gaq[_gaq.length-1][0] == "_trackPageview", "Wrong event type in _gaq for goal"
+    ok _gaq[_gaq.length-1][1] == "test8", "Wrong goal name in _gaq"
+
+  # TODO test "Javascript onclick events should still occur", ->
+
   test "Reroll always rerolls a different variant than the current one", ->
     oldVariant = xander.variant()
     xander.reroll()

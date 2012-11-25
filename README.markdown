@@ -47,6 +47,38 @@ Multivariate Testing made easy.
 * One of the data-css-variants will be added as a class to your section.
 * Variation reports are based on ids 
 
+## Goals
+
+Goals are a simple way to track conversions.  In Google Analytics they correlate specifically to _trackPageview's.
+
+### Defining a goal
+
+```html
+  <form data-goal="New User" onsubmit='processInfo(); return false'>
+    <!-- Here's where you could multivariate test the form. -->
+    <h1> Sign up for our amazing product </h1>
+    <input type='submit'> Sign up </input>
+  </form>
+```
+
+### Potential gotchas
+
+Goals are a relatively new addition to Xander, so we haven't quite tested out the following use cases across the many different browsers in common use:
+
+* a tags that redirect the page (simple a hrefs without target=_blank)
+* forms that do a full page submit (ajax forms seem ok)
+
+That said if you are creating things as a single page application, you shouldn't have any issues using Xander's goals.
+
+## Rerolling a page
+
+You can add ?showVariants=true to your url to see all your variants.  You can now call a rerollVariants method to get a whole new version of your site.
+
+```js
+  xander.reroll(); // reroll all CSS and content variants
+  xander.reroll($("#choices")); // reroll the #choices variant
+```
+
 ## Future
 * Free with Math.random().  90/10, ensured distribution, and Best Site Finder option in planning stages as services.
 
