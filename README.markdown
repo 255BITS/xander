@@ -104,7 +104,7 @@ You can now call a rerollVariants method to get a whole new version of your site
 
 # Commercial offerings
 
-If you like xander, but don't like Math.rand() or having to review your variant's performance, check out [xander.io](xander.io) .  It's a SAAS that uses 90/10 testing to figure out your best performing variant (with a friendly UI).
+If you like xander, but don't like the sample distribution using Math.rand() - or don't like having to review your variant's performance, check out [xander.io](xander.io) .  It's a SAAS that uses 90/10 testing to figure out your best performing variant (with a friendly UI).
 
 # Related Work
 
