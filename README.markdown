@@ -4,18 +4,26 @@ Multivariate Testing in JavaScript made easy.  Also see [xander.io](http://xande
 
 ## Principles:
 
-* Multivariate testing should be simple for developers
-* It should be easy to see all the variants
-* Analytics should be easy to view
+* Multivariate testing should be simple for developers and designers
+* Variants should be cheap to add and simple to view
+* Analytics should be useful and available for review
+* If you are using [xander.io](http://xander.io), your website should get better over time without manual intervention.
 
 ## Library Requirements
 
-* Google Analytics
+* [xander.io](http://xander.io) (optional)
+* Google Analytics 
 * jQuery
 
 ## Installation
 
 * Include xander-client javascript file
+
+### CDN 
+
+```html
+  <script src='http://cdn.xander.io/xander-1.0.js'></script>
+```
 
 ## Usage
 
