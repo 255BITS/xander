@@ -1,12 +1,12 @@
 # Xander 
 
-Multivariate Testing made easy.
+Multivariate Testing in JavaScript made easy.  Also see [xander.io](http://xander.io), the pro version of xander.
 
 ## Principles:
 
-* Multivariate testing should be simple
-* Results should be available in Analytics
+* Multivariate testing should be simple for developers
 * It should be easy to see all the variants
+* Analytics should be easy to view
 
 ## Library Requirements
 
@@ -21,30 +21,33 @@ Multivariate Testing made easy.
 
 ### Multivariate testing for HTML elements 
 
-* Options wrapped in tags
+* Defining a variant
     ```html
-      <section id="buttons">
-        <button data-variant='green' class='green'>
-        </button>
-        <button data-variant="red" class='red'>
-        </button>
-        <button data-variant="blue" class='blue'>
-        </button>
-      </section>
+      <div id="callToAction">
+        <div data-variant="logic" class='red hide'>
+          If you have a website with users, you should be multivariate testing.  It's the only way to ensure your changes are actually what users want.
+        </div>
+        <div data-variant="google" class='blue hide'>
+          Multivariate testing is used by Google to optimize their search results.
+        </div>
+        <div data-variant='silly' class='green hide'>
+          You can't multivariate test your life... yet - but now you can easily multivariate test your websites!
+        </div>
+      </div>
     ```
 
-* Initially hide all elements that are data-variants.
-* Specify ?showVariants=true to your URL for a suprise!
-* Variation reports are based on root element id 
+* This variant sets up a three way test between logic, google, and silly calls to action variants so we can see which phrasing works best. 
+* The data will be available in Google Analytics (or [xander.io](http://xander.io) if you chose to use it) - INSERT SCREENSHOT
+* We have a simple hide class that sets 'display: none'.  This avoids flicker after the page loads.
 
 ### Multivariate testing for CSS classes
 
-* Add variant classes
+* Defining testable CSS classes
     ```html 
-      <section id='test3' data-css-variants="class1 class2" />
+      <section id='signup' data-css-variants="green blue" />
     ```
 
-* One of the data-css-variants will be added as a class to your section.
+* One of the two green or blue classes will be added to your #signup button.
 * Variation reports are based on ids 
 
 ## Goals
@@ -61,27 +64,48 @@ Goals are a simple way to track conversions.  In Google Analytics they correlate
   </form>
 ```
 
-### Potential gotchas
+Goals are a relatively new addition to Xander and work by binding to an element's jquery click event (submit event in the case of a form).  
 
-Goals are a relatively new addition to Xander, so we haven't quite tested out the following use cases across the many different browsers in common use:
+If you can't get the goal to trigger - console.log is your friend.  Open up your console and you will see some messages from xander when your page is setup and again when a goal is pressed.
 
-* a tags that redirect the page (simple a hrefs without target=_blank)
-* forms that do a full page submit (ajax forms seem ok)
+If all else fails, you can call:
 
-That said if you are creating things as a single page application, you shouldn't have any issues using Xander's goals.
+```javascript
+  xander.goalReached("New User");
+```
+
+
+### Verifying your variant test is setup
+
+//#### Step 1 - Verify Goals
+//
+//* use ?showVariants=true in your test URL.
+//* the current variant selected and goals completed this session are shown at the top of the page.
+//* click your goal
+//* watch your goal count increase
+//
+//---
+//
+//#### Step 2 - verify with Google Analytics
+* Setup your variants and page goal
+* Click your page goal
+* Log in to Google Analytics
+* If you are using Google Analytics and not [xander.io](xander.io), you will likely face a problem where Google Analytics will reflect your test data.  This is a known issue, ideas are welcome.
 
 ## Rerolling a page
 
-You can add ?showVariants=true to your url to see all your variants.  You can now call a rerollVariants method to get a whole new version of your site.
+You can now call a rerollVariants method to get a whole new version of your site.
 
 ```js
   xander.reroll(); // reroll all CSS and content variants
   xander.reroll($("#choices")); // reroll the #choices variant
 ```
 
-## Future
-* Free with Math.random().  90/10, ensured distribution, and Best Site Finder option in planning stages as services.
+# Commercial offerings
+
+If you like xander, but don't like Math.rand() or having to review your variant's performance, check out [xander.io](xander.io) .  It's a SAAS that uses 90/10 testing to figure out your best performing variant (with a friendly UI).
 
 # Related Work
 
 * [ABalytics](https://github.com/danmaz74/ABalytics)
+* Send us a message if there's anything else that should be listed.
