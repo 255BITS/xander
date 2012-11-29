@@ -37,7 +37,7 @@ Multivariate Testing in JavaScript made easy.  Also see [xander.io](http://xande
     ```
 
 * This variant sets up a three way test between logic, google, and silly calls to action variants so we can see which phrasing works best. 
-* The data will be available in Google Analytics (or [xander.io](http://xander.io) if you chose to use it) - INSERT SCREENSHOT
+* The data will be available in Google Analytics (or [xander.io](http://xander.io) if you chose to use it)
 * We have a simple hide class that sets 'display: none'.  This avoids flicker after the page loads.
 
 ### Multivariate testing for CSS classes
@@ -64,7 +64,7 @@ Goals are a simple way to track conversions.  In Google Analytics they correlate
   </form>
 ```
 
-Goals are a relatively new addition to Xander and work by binding to an element's jquery click event (submit event in the case of a form).  
+Goals in Xander work by binding to an element's jquery click event (or submit event in the case of a form).  
 
 If you can't get the goal to trigger - console.log is your friend.  Open up your console and you will see some messages from xander when your page is setup and again when a goal is pressed.
 
@@ -91,7 +91,7 @@ If all else fails, you can call:
 * Setup your variants and page goal
 * Click your page goal
 * Log in to Google Analytics
-* If you are using Google Analytics and not [xander.io](xander.io), you will likely face a problem where Google Analytics will reflect your test data.  This is a known issue, ideas are welcome.
+* If you are using Google Analytics and not [xander.io](xander.io), you will likely face a problem where Google Analytics will reflect your test data.  This can be filtered in google analytics, or just use [http://xander.io](xander.io).
 
 ## Rerolling a page
 
