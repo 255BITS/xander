@@ -76,17 +76,18 @@ If all else fails, you can call:
 
 
 ### Verifying your variant test is setup
+<!--
+#### Step 1 - Verify Goals
 
-//#### Step 1 - Verify Goals
-//
-//* use ?showVariants=true in your test URL.
-//* the current variant selected and goals completed this session are shown at the top of the page.
-//* click your goal
-//* watch your goal count increase
-//
-//---
-//
-//#### Step 2 - verify with Google Analytics
+* use ?showVariants=true in your test URL.
+* the current variant selected and goals completed this session are shown at the top of the page.
+* click your goal
+* watch your goal count increase
+
+---
+
+#### Step 2 - verify with Google Analytics
+-->
 * Setup your variants and page goal
 * Click your page goal
 * Log in to Google Analytics
