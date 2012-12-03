@@ -213,6 +213,7 @@ class XanderClient
     url += "url=#{encodeURIComponent(window.location.host+window.location.pathname)}"
     url += "&user=#{encodeURIComponent(@uuid())}"
     url += "&goal=#{encodeURIComponent(goal)}"
+    url += "&chosen=#{encodeURIComponent(JSON.stringify(@variant()))}"
     url
 
 xander = new XanderClient()
