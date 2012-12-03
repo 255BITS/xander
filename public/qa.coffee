@@ -87,3 +87,10 @@ $ ->
     ok !$obj.hasClass('a'), "unnamed sections should be hidden"
     ok !$obj.hasClass('b'), "unnamed sections should be hidden"
 
+  test "API key path correctness", ->
+    ok xander.apiKeyPath("test") == "http://variants.xander.io/test/localhost%3A2255%2Fqa.html/chosen.js"
+
+  test "adding an API key includes xander professional edition", ->
+    scripts = $("script").length
+    xander.apiKey("test")
+    ok scripts + 1 == $("script").length, "Not generating script tag for API"

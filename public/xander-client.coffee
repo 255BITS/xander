@@ -93,6 +93,12 @@ class XanderClient
         console?.error("[Xander] Error: no idea what to do with the goal defined on this element:", x)
         console?.error( "Supported types are a tags, submit inputs, forms.  Please check http://xander.io for more information")
 
+  apiKeyPath : (key) ->
+    "http://variants.xander.io/#{key}/#{encodeURIComponent(window.location.host+window.location.pathname)}/chosen.js"
+
+  apiKey : (key) ->
+    $("head").append("<script src='#{@apiKeyPath(key)}'></script>")
+
   goalReached : (goal) ->
     _gaq.push ['_trackPageview', goal]
 
