@@ -38,6 +38,9 @@ $ ->
     ok _gaq[_gaq.length-1][0] == "_trackPageview", "Wrong event type in _gaq for goal"
     ok _gaq[_gaq.length-1][1] == "test8", "Wrong goal name in _gaq"
 
+  test "Goals should serialize", ->
+    ok xander.goals().length > 0, "There are no goals listed."
+
   # TODO test "Javascript onclick events should still occur", ->
 
   test "Reroll always rerolls a different variant than the current one", ->
@@ -87,10 +90,35 @@ $ ->
     ok !$obj.hasClass('a'), "unnamed sections should be hidden"
     ok !$obj.hasClass('b'), "unnamed sections should be hidden"
 
+  test "all your variants are belong to us", ->
+    ok JSON.stringify(xander.allVariants()["test1"]) == JSON.stringify(['a', 'b', 'c']), "Content Variants aren't represented."
+    ok JSON.stringify(xander.allVariants()["test3"]) == JSON.stringify(["class1", "class2"]), "CSS Variants aren't represented."
+
+  test "uuid should be generated.", -> 
+    ok xander.uuid().length > 1, "UUID should be generated"
+  test "uuid should be stored in localstorage", ->
+    ok localStorage.getItem('uuid').length > 1, "UUID should be stored."
+
+  # xander.io integration
   test "API key path correctness", ->
     ok xander.apiKeyPath("test") == "http://variants.xander.io/test/localhost%3A2255%2Fqa.html/chosen.js"
 
-  test "adding an API key includes xander professional edition", ->
+  test "Adding an API key includes xander professional edition", ->
     scripts = $("script").length
     xander.apiKey("test")
     ok scripts + 1 == $("script").length, "Not generating script tag for API"
+
+  test "Add a tracking pixel on variants chosen", ->
+    ok xander.addTrackingPixel() == true , "Couldn't add tracking pixel"
+
+  test "Disable tracking pixel works", ->
+    xander.disableTrackingPixel()
+    ok xander.addTrackingPixel() == false, "Tracking pixel has become omnipresent!!"
+
+
+  test "Tracking pixel path should include relevant information", ->
+    ok /url=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include URL"
+    ok /chosen=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include chosen variants"
+    ok /all=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include variant options"
+    ok /goals=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include goals"
+    ok /user=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include user token"

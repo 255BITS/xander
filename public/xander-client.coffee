@@ -61,7 +61,7 @@ class XanderClient
       $(x).attr('data-variant-chosen', chosen.attr('data-variant'))
       slot_number += 1
     if(all_choices.length > 5)
-      console?.log "You have too many variants to track!  Google Analytics limits the number of custom variable slots to 5."
+      console?.log "You have too many variants to track with Google Analytics!  Google Analytics limits the number of custom variable slots to 5."
 
   chooseCssVariant: ->
     all_choices = $("[data-css-variants]")
@@ -143,9 +143,6 @@ class XanderClient
       @chooseVariant()
       @chooseCssVariant()
 
-
-      
-
   # Returns the current variant in JSON form
   variant : ->
     results = {}
@@ -154,6 +151,61 @@ class XanderClient
       title = $(x).attr 'id' || ("slot_"+slot_number)
       results[title]=chosen
     results
+
+  allVariants : ->
+    result = {}
+    $("*[data-variant-chosen]").each (i, x) ->
+      $x = $(x)
+      id = $x.attr('id')
+      result[id] = []
+
+      if $x.attr("data-css-variants")
+        result[id] = $x.attr('data-css-variants').split(' ')
+      else
+        $x.find("[data-variant]").each (j, y) ->
+          result[id].push $(y).attr("data-variant")
+
+    return result
+
+  goals : ->
+    $.map $("*[data-goal]"), (x) ->
+      $(x).attr("data-goal")
+
+  # no I dont want any cool information about my variants
+  disableTrackingPixel : ->
+    @trackingDisabled = true
+
+  addTrackingPixel : ->
+    return false if @trackingDisabled
+    i = new Image() 
+    i.src = @trackingPixelPath()
+    true
+
+  uuid : ->
+    return @uid if @uid
+    @uid = localStorage.getItem('uuid')
+    return @uid if @uid
+
+    # courtesy of the insane genius broofa at http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
+    @uid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace /[xy]/g, (c) =>
+      r = Math.random()*16|0
+      v = if c == 'x' then r else (r&0x3|0x8)
+      v.toString(16)
+    
+    localStorage.setItem('uuid', @uid)
+    return @uid
+
+
+
+  trackingPixelPath : ->
+    url = "http://track.xander.io/tracking.gif?"
+    url += "url=#{encodeURIComponent(window.location.host+window.location.pathname)}"
+    url += "&chosen=#{encodeURIComponent(JSON.stringify(@variant()))}"
+    url += "&all=#{encodeURIComponent(JSON.stringify(@allVariants()))}"
+    url += "&goals=#{encodeURIComponent(JSON.stringify(@goals()))}"
+    url += "&user=#{encodeURIComponent(@uuid())}"
+    return url
+
 
 
 xander = new XanderClient()
@@ -165,6 +217,7 @@ $ ->
   xander.chooseCssVariant()
   xander.wireGoals()
   xander.callAnalytics() unless getParameterByName('showVariants') == 'true'
+  xander.addTrackingPixel()
 
 window.xander = xander
 
