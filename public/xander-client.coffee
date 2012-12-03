@@ -4,7 +4,7 @@ getParameterByName = (name) ->
   regex = new RegExp(regexS)
   results = regex.exec(window.location.search)
   return "" if(results == null)
-  return decodeURIComponent(results[1].replace(/\+/g, " "))
+  decodeURIComponent(results[1].replace(/\+/g, " "))
 
 
 class XanderClient
@@ -101,6 +101,10 @@ class XanderClient
 
   goalReached : (goal) ->
     _gaq.push ['_trackPageview', goal]
+    return false if @trackingDisabled
+    i = new Image() 
+    i.src = @trackingPixelGoalPath(goal)
+    return true
 
   # Structure of each variant has both:
   #   data-variant-slot and data-variant-chosen (name)
@@ -193,20 +197,23 @@ class XanderClient
       v.toString(16)
     
     localStorage.setItem('uuid', @uid)
-    return @uid
-
-
+    @uid
 
   trackingPixelPath : ->
-    url = "http://track.xander.io/tracking.gif?"
+    url = "http://track.xander.io/impression.gif?"
     url += "url=#{encodeURIComponent(window.location.host+window.location.pathname)}"
     url += "&chosen=#{encodeURIComponent(JSON.stringify(@variant()))}"
     url += "&all=#{encodeURIComponent(JSON.stringify(@allVariants()))}"
     url += "&goals=#{encodeURIComponent(JSON.stringify(@goals()))}"
     url += "&user=#{encodeURIComponent(@uuid())}"
-    return url
+    url
 
-
+  trackingPixelGoalPath : (goal) ->
+    url = "http://track.xander.io/goal.gif?"
+    url += "url=#{encodeURIComponent(window.location.host+window.location.pathname)}"
+    url += "&user=#{encodeURIComponent(@uuid())}"
+    url += "&goal=#{encodeURIComponent(goal)}"
+    url
 
 xander = new XanderClient()
 

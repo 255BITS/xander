@@ -115,6 +115,9 @@ $ ->
     xander.disableTrackingPixel()
     ok xander.addTrackingPixel() == false, "Tracking pixel has become omnipresent!!"
 
+  test "Goal tracking should have uuid.", ->
+    ok /user=/.test(xander.trackingPixelGoalPath('test')), "Goal Tracking pixel doesn't include user token"
+    ok /goal=/.test(xander.trackingPixelGoalPath('test')), "Goal Tracking pixel doesn't include user token"
 
   test "Tracking pixel path should include relevant information", ->
     ok /url=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include URL"
