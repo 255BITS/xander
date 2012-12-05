@@ -13,7 +13,7 @@ class XanderClient
   showVariantBar : ->
     console.log("Show variant bar")
     $('body').prepend """
-      <div id='__variants' style='padding-left: 10%; width: 80%; background: black; color: white; border-bottom: 5px solid #CCC'>
+      <div id='__variants' style='padding-left: 10%; width: 100%; background: black; color: white; border-bottom: 5px solid #CCC'>
       </div>
 """
     # Element variants
