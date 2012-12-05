@@ -8,31 +8,38 @@ getParameterByName = (name) ->
 
 
 class XanderClient
-  first_slot = 1
-  slot_number = 1
+  constructor: ->
+    @first_slot = 1
+    @slot_number = 1
   showVariantBar : ->
     console.log("Show variant bar")
     $('body').prepend """
       <div id='__variants' style='padding-left: 10%; width: 100%; background: black; color: white; border-bottom: 5px solid #CCC'>
+        <table id='__variantTable'></table>
       </div>
 """
     # Element variants
-    $("*[data-variant]").parent().each (i, x) ->
+    $("*[data-variant]").parent().each (i, x) =>
       variants = $(x).find("> [data-variant]")
       options = ""
-      variants.each (i, y) ->
-        options += " <button onclick='xander.showVariant(\"#{$(x).attr('id')}\",\"#{$(y).attr('data-variant')}\"); return false'>#{$(y).attr('data-variant')}</button>"
-      
-      $('#__variants').append("<div><span>#{$(x).attr('id')}</span><span>#{options}</span></div>")
+      variants.each (i, y) =>
+        options += " <td><button onclick='xander.showVariant(\"#{@titleFor(x)}\",\"#{$(y).attr('data-variant')}\"); return false'>#{$(y).attr('data-variant')}</button></td>"
+      console.log($(x).attr('id'))
+
+      $('#__variantTable').append("<tr><th>#{@titleFor(x)}</th>#{options}</tr>")
+      @slot_number+=1
 
     # CSS variants
-    $("*[data-css-variants]").each (i, x) ->
+    $("*[data-css-variants]").each (i, x) =>
       variants = $(x).attr('data-css-variants').split(' ')
       options = ""
-      $(variants).each (i, y) ->
-        options += " <button onclick='xander.showCssVariant(\"#{$(x).attr('id')}\",\"#{y}\"); return false'>#{y}</button>"
+      console.log("2", variants)
+      $(variants).each (i, y) =>
+        options += " <td><button onclick='xander.showCssVariant(\"#{@titleFor(x)}\",\"#{y}\"); return false'>#{y}</button></td>"
 
-      $('#__variants').append("<div><span>#{$(x).attr('id')}</span><span>#{options}</span></div>")
+      $('#__variantTable').append("<tr><th>#{@titleFor(x)}</th>#{options}</tr>")
+      @slot_number+=1
+    @slot_number = @first_slot
 
   showVariant: (name, subname) ->
     variants = $("##{name}")
@@ -48,7 +55,7 @@ class XanderClient
 
   chooseVariant: ->
     all_choices = $("*[data-variant]").parent()
-    all_choices.each (i, x) ->
+    all_choices.each (i, x) =>
       variants = $(x).find("> [data-variant]")
       variants.hide()
       # the user forgot to name the section or containing div
@@ -59,13 +66,13 @@ class XanderClient
       $(x).attr('data-variant-slot', slot_number)
       chosen = $(variants[parseInt(Math.random() * variants.length)]).show()
       $(x).attr('data-variant-chosen', chosen.attr('data-variant'))
-      slot_number += 1
+      @slot_number += 1
     if(all_choices.length > 5)
       console?.log "You have too many variants to track with Google Analytics!  Google Analytics limits the number of custom variable slots to 5."
 
   chooseCssVariant: ->
     all_choices = $("[data-css-variants]")
-    all_choices.each (i, x) ->
+    all_choices.each (i, x) =>
       if !$(x).attr('id')
         console.error("data-css-variants element is missing id")
         console.error x
@@ -75,9 +82,9 @@ class XanderClient
       $(options).each (j, k) ->
         $(x).removeClass k
       $(x).addClass option
-      $(x).show().attr 'data-variant-slot', slot_number
+      $(x).show().attr 'data-variant-slot', @slot_number
       $(x).show().attr 'data-variant-chosen', option
-      slot_number += 1
+      @slot_number += 1
 
   wireGoals: ->
     $("*[data-goal]").each (i, x) ->
@@ -106,14 +113,19 @@ class XanderClient
     i.src = @trackingPixelGoalPath(goal)
     return true
 
+  titleFor : (e) ->
+    id = $(e).attr 'id'
+    return "Slot #"+@slot_number unless id
+    id
+
   # Structure of each variant has both:
   #   data-variant-slot and data-variant-chosen (name)
   #   id is used to set the custom variable.
   callAnalytics : ->
-    $("*[data-variant-slot]").each (i, x) ->
+    $("*[data-variant-slot]").each (i, x) =>
       chosen = $(x).attr('data-variant-chosen')
       slot_number = $(x).attr('data-variant-slot')
-      title = $(x).attr 'id' || ("slot_"+slot_number)
+      title = @titleFor(x)
       _gaq.push ['_setCustomVar', parseInt(slot_number), title,  chosen, 2 ] 
 
   # This rerolls the page into any variant except the current one
@@ -219,8 +231,8 @@ class XanderClient
 xander = new XanderClient()
 
 $ ->
-  xander.showVariantBar() if getParameterByName('showVariants') == 'true'
   xander.slot_number = xander.first_slot
+  xander.showVariantBar() if getParameterByName('showVariants') == 'true'
   xander.chooseVariant()
   xander.chooseCssVariant()
   xander.wireGoals()

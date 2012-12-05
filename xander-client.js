@@ -24,25 +24,28 @@
     slot_number = 1;
 
     XanderClient.prototype.showVariantBar = function() {
+      var _this = this;
       console.log("Show variant bar");
-      $('body').prepend("<div id='__variants' style='padding-left: 10%; width: 80%; background: black; color: white; border-bottom: 5px solid #CCC'>\n</div>");
+      $('body').prepend("<div id='__variants' style='padding-left: 10%; width: 100%; background: black; color: white; border-bottom: 5px solid #CCC'>\n  <table id='__variantTable'></table>\n</div>");
       $("*[data-variant]").parent().each(function(i, x) {
         var options, variants;
         variants = $(x).find("> [data-variant]");
         options = "";
         variants.each(function(i, y) {
-          return options += " <button onclick='xander.showVariant(\"" + ($(x).attr('id')) + "\",\"" + ($(y).attr('data-variant')) + "\"); return false'>" + ($(y).attr('data-variant')) + "</button>";
+          return options += " <td><button onclick='xander.showVariant(\"" + (_this.titleFor(x)) + "\",\"" + ($(y).attr('data-variant')) + "\"); return false'>" + ($(y).attr('data-variant')) + "</button></td>";
         });
-        return $('#__variants').append("<div><span>" + ($(x).attr('id')) + "</span><span>" + options + "</span></div>");
+        console.log($(x).attr('id'));
+        return $('#__variantTable').append("<tr><th>" + ($(x).attr('id')) + "</th>" + options + "</tr>");
       });
       return $("*[data-css-variants]").each(function(i, x) {
         var options, variants;
         variants = $(x).attr('data-css-variants').split(' ');
         options = "";
+        console.log("2", variants);
         $(variants).each(function(i, y) {
-          return options += " <button onclick='xander.showCssVariant(\"" + ($(x).attr('id')) + "\",\"" + y + "\"); return false'>" + y + "</button>";
+          return options += " <td><button onclick='xander.showCssVariant(\"" + (_this.titleFor(x)) + "\",\"" + y + "\"); return false'>" + y + "</button></td>";
         });
-        return $('#__variants').append("<div><span>" + ($(x).attr('id')) + "</span><span>" + options + "</span></div>");
+        return $('#__variantTable').append("<tr><th>" + ($(x).attr('id')) + "</th>" + options + "</tr>");
       });
     };
 
@@ -81,7 +84,7 @@
         return slot_number += 1;
       });
       if (all_choices.length > 5) {
-        return typeof console !== "undefined" && console !== null ? console.log("You have too many variants to track!  Google Analytics limits the number of custom variable slots to 5.") : void 0;
+        return typeof console !== "undefined" && console !== null ? console.log("You have too many variants to track with Google Analytics!  Google Analytics limits the number of custom variable slots to 5.") : void 0;
       }
     };
 
@@ -129,8 +132,32 @@
       });
     };
 
+    XanderClient.prototype.apiKeyPath = function(key) {
+      return "http://variants.xander.io/" + key + "/" + (encodeURIComponent(window.location.host + window.location.pathname)) + "/chosen.js";
+    };
+
+    XanderClient.prototype.apiKey = function(key) {
+      return $("head").append("<script src='" + (this.apiKeyPath(key)) + "'></script>");
+    };
+
     XanderClient.prototype.goalReached = function(goal) {
-      return _gaq.push(['_trackPageview', goal]);
+      var i;
+      _gaq.push(['_trackPageview', goal]);
+      if (this.trackingDisabled) {
+        return false;
+      }
+      i = new Image();
+      i.src = this.trackingPixelGoalPath(goal);
+      return true;
+    };
+
+    XanderClient.prototype.titleFor = function(e) {
+      var id;
+      id = $(e).attr('id');
+      if (id) {
+        return "Slot #" + slot_number;
+      }
+      return id;
     };
 
     XanderClient.prototype.callAnalytics = function() {
@@ -138,7 +165,7 @@
         var chosen, title;
         chosen = $(x).attr('data-variant-chosen');
         slot_number = $(x).attr('data-variant-slot');
-        title = $(x).attr('id' || ("slot_" + slot_number));
+        title = titleFor(x);
         return _gaq.push(['_setCustomVar', parseInt(slot_number), title, chosen, 2]);
       });
     };
@@ -193,6 +220,85 @@
       return results;
     };
 
+    XanderClient.prototype.allVariants = function() {
+      var result;
+      result = {};
+      $("*[data-variant-chosen]").each(function(i, x) {
+        var $x, id;
+        $x = $(x);
+        id = $x.attr('id');
+        result[id] = [];
+        if ($x.attr("data-css-variants")) {
+          return result[id] = $x.attr('data-css-variants').split(' ');
+        } else {
+          return $x.find("[data-variant]").each(function(j, y) {
+            return result[id].push($(y).attr("data-variant"));
+          });
+        }
+      });
+      return result;
+    };
+
+    XanderClient.prototype.goals = function() {
+      return $.map($("*[data-goal]"), function(x) {
+        return $(x).attr("data-goal");
+      });
+    };
+
+    XanderClient.prototype.disableTrackingPixel = function() {
+      return this.trackingDisabled = true;
+    };
+
+    XanderClient.prototype.addTrackingPixel = function() {
+      var i;
+      if (this.trackingDisabled) {
+        return false;
+      }
+      i = new Image();
+      i.src = this.trackingPixelPath();
+      return true;
+    };
+
+    XanderClient.prototype.uuid = function() {
+      var _this = this;
+      if (this.uid) {
+        return this.uid;
+      }
+      this.uid = localStorage.getItem('uuid');
+      if (this.uid) {
+        return this.uid;
+      }
+      this.uid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r, v;
+        r = Math.random() * 16 | 0;
+        v = c === 'x' ? r : r & 0x3 | 0x8;
+        return v.toString(16);
+      });
+      localStorage.setItem('uuid', this.uid);
+      return this.uid;
+    };
+
+    XanderClient.prototype.trackingPixelPath = function() {
+      var url;
+      url = "http://track.xander.io/impression.gif?";
+      url += "url=" + (encodeURIComponent(window.location.host + window.location.pathname));
+      url += "&chosen=" + (encodeURIComponent(JSON.stringify(this.variant())));
+      url += "&all=" + (encodeURIComponent(JSON.stringify(this.allVariants())));
+      url += "&goals=" + (encodeURIComponent(JSON.stringify(this.goals())));
+      url += "&user=" + (encodeURIComponent(this.uuid()));
+      return url;
+    };
+
+    XanderClient.prototype.trackingPixelGoalPath = function(goal) {
+      var url;
+      url = "http://track.xander.io/goal.gif?";
+      url += "url=" + (encodeURIComponent(window.location.host + window.location.pathname));
+      url += "&user=" + (encodeURIComponent(this.uuid()));
+      url += "&goal=" + (encodeURIComponent(goal));
+      url += "&chosen=" + (encodeURIComponent(JSON.stringify(this.variant())));
+      return url;
+    };
+
     return XanderClient;
 
   })();
@@ -208,8 +314,9 @@
     xander.chooseCssVariant();
     xander.wireGoals();
     if (getParameterByName('showVariants') !== 'true') {
-      return xander.callAnalytics();
+      xander.callAnalytics();
     }
+    return xander.addTrackingPixel();
   });
 
   window.xander = xander;
