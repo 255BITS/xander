@@ -14,8 +14,10 @@ class XanderClient
   showVariantBar : ->
     console.log("Show variant bar")
     $('body').prepend """
-      <div id='__variants' style='padding-left: 10%; width: 100%; background: black; color: white; border-bottom: 5px solid #CCC'>
-        <table id='__variantTable'></table>
+      <div id='__variants' style='width: 100%; background: black; color: white; border-bottom: 5px solid #CCC'>
+        <div style='padding-left: 10%'>
+          <table id='__variantTable'></table>
+        </div>
       </div>
 """
     # Element variants
