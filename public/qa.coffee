@@ -37,6 +37,10 @@ $ ->
     $("#test8atag").click()
     ok _gaq[_gaq.length-1][0] == "_trackPageview", "Wrong event type in _gaq for goal"
     ok _gaq[_gaq.length-1][1] == "test8", "Wrong goal name in _gaq"
+  test "Goals should work on <button tags>", ->
+    $("#test9button").click()
+    ok _gaq[_gaq.length-1][0] == "_trackPageview", "eventtype for button tag incorrect."
+    ok _gaq[_gaq.length-1][1] == 'test9', 'Wrong goal name in _gaq'
 
   test "Goals should serialize", ->
     ok xander.goals().length > 0, "There are no goals listed."
