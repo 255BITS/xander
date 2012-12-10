@@ -63,7 +63,7 @@ class XanderClient
         console.error("Could not find parent id for data-variant")
         console.error x
         return
-      $(x).attr('data-variant-slot', slot_number)
+      $(x).attr('data-variant-slot', @slot_number)
       chosen = $(variants[parseInt(Math.random() * variants.length)]).show()
       $(x).attr('data-variant-chosen', chosen.attr('data-variant'))
       @slot_number += 1
@@ -90,7 +90,7 @@ class XanderClient
     $("*[data-goal]").each (i, x) ->
       x = $(x)
       goal = x.attr('data-goal')
-      if(x.is("a") || (x.is("input") && x.attr('type') == 'submit' )) 
+      if(x.is("a") || (x.is("input") && x.attr('type') == 'submit' ) || x.is("button")) 
         x.click ->
           xander.goalReached(goal)
       else if x.is("form")
@@ -124,9 +124,9 @@ class XanderClient
   callAnalytics : ->
     $("*[data-variant-slot]").each (i, x) =>
       chosen = $(x).attr('data-variant-chosen')
-      slot_number = $(x).attr('data-variant-slot')
+      @slot_number = $(x).attr('data-variant-slot')
       title = @titleFor(x)
-      _gaq.push ['_setCustomVar', parseInt(slot_number), title,  chosen, 2 ] 
+      _gaq.push ['_setCustomVar', parseInt(@slot_number), title,  chosen, 2 ] 
 
   # This rerolls the page into any variant except the current one
   # This is more useful for demo or testing than prod.
