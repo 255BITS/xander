@@ -70,10 +70,10 @@ body
               p#nested3null(data-css-variants)
 
         section#test5.hide
-          section(data-test5=true)
+          section#test5nested(data-test5=true)
             p(data-variant='1') 1
             p(data-variant='2') 2
-          section(data-css-variants='a b', data-test5-css=true)
+          section#test5-css(data-css-variants='a b', data-test5-css=true)
 
         section#test6
           form(onsubmit='console.log("test6 goal"); return false')
@@ -83,6 +83,14 @@ body
 
         a#test8atag(data-goal='test8', onclick='return false')
         button#test9button(data-goal='test9', onclick='return false')
+
+        section#useVariant
+          .choice1(data-variant='a').hide
+          .choice2(data-variant='b').hide
+          .choice3(data-variant='c').hide
+        section
+          #useVariantCSS(data-css-variants='a b c')
+        section
   .xander
     img(src='xander.png')
 

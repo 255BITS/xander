@@ -63,11 +63,20 @@ class XanderClient
       # the user forgot to name the section or containing div
       if !$(x).attr('id')
         console.error("Could not find parent id for data-variant")
-        console.error x
+        console.error x.outerHTML
         return
       $(x).attr('data-variant-slot', @slot_number)
-      chosen = $(variants[parseInt(Math.random() * variants.length)]).show()
-      $(x).attr('data-variant-chosen', chosen.attr('data-variant'))
+      if @xanderIOVariants
+        variant = @xanderIOVariants[$(x).attr('id')]
+        $selected = $(x).find "> [data-variant=#{variant}]"
+        if $selected.length == 0
+          $selected = $(variants[0])
+
+        chosen = $selected.show()
+        $(x).attr('data-variant-chosen', chosen.attr('data-variant'))
+      else
+        chosen = $(variants[parseInt(Math.random() * variants.length)]).show()
+        $(x).attr('data-variant-chosen', chosen.attr('data-variant'))
       @slot_number += 1
     if(all_choices.length > 5)
       console?.log "You have too many variants to track with Google Analytics!  Google Analytics limits the number of custom variable slots to 5."
@@ -80,7 +89,13 @@ class XanderClient
         console.error x
         return
       options = $(x).attr('data-css-variants').split(' ')
-      option = options[parseInt(Math.random() * options.length)]
+      console.log @xanderIOVariants
+      if @xanderIOVariants
+        option = @xanderIOVariants[$(x).attr('id')]
+        if !option
+          option = options[0]
+      else
+        option = options[parseInt(Math.random() * options.length)]
       $(options).each (j, k) ->
         $(x).removeClass k
       $(x).addClass option
@@ -229,6 +244,9 @@ class XanderClient
     url += "&goal=#{encodeURIComponent(goal)}"
     url += "&chosen=#{encodeURIComponent(JSON.stringify(@variant()))}"
     url
+
+  useVariant : (choices) ->
+    @xanderIOVariants = choices
 
 xander = new XanderClient()
 

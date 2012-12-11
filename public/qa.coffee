@@ -129,3 +129,40 @@ $ ->
     ok /all=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include variant options"
     ok /goals=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include goals"
     ok /user=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include user token"
+
+  test "xander#useVariant should use a data variant if specified", ->
+    xander.useVariant {useVariant:'b'}
+    xander.chooseVariant()
+    xander.chooseCssVariant()
+    ok $("#useVariant").attr('data-variant-chosen') == 'b', "chose wrong data variant"
+
+  test "xander#useVariant should use a data-css variant if a css variant is specified", ->
+    xander.useVariant {useVariantCSS:'b'}
+    xander.chooseVariant()
+    xander.chooseCssVariant()
+    ok $("#useVariantCSS").attr('data-variant-chosen') == 'b', "chose wrong CSS variant"
+
+  test "xander#useVariant should default to the 0-th entry if no variant is chosen", ->
+    xander.useVariant {}
+    xander.chooseVariant()
+    xander.chooseCssVariant()
+    ok $("#useVariant").attr('data-variant-chosen') == 'a', "0-th index data variant not chosen"
+    
+  test "xander#useVariant should default to the 0-th entry if no css variant is chosen", ->
+    xander.useVariant {}
+    xander.chooseVariant()
+    xander.chooseCssVariant()
+    ok $("#useVariantCSS").attr('data-variant-chosen') == 'a', "0-th index CSS entry not chosen"
+
+  test "xander#useVariant invalid data variant should default to 0-th index", ->
+    xander.useVariant {useVariant:'non-exist'}
+    xander.chooseVariant()
+    xander.chooseCssVariant()
+    ok $("#useVariant").attr('data-variant-chosen') == 'a', "0-th index data variant not chosen"
+
+   test "xander#useVariant invalid data css variant should default to 0-th index", ->
+    xander.useVariant {useVariantCSS:'non-exist'}
+    xander.chooseVariant()
+    xander.chooseCssVariant()
+    ok $("#useVariant").attr('data-variant-chosen') == 'a', "0-th index data variant not chosen"
+    
