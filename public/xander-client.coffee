@@ -12,7 +12,6 @@ class XanderClient
     @first_slot = 1
     @slot_number = 1
   showVariantBar : ->
-    console.log("Show variant bar")
     $('body').prepend """
       <div id='__variants' style='width: 100%; background: black; color: white; border-bottom: 5px solid #CCC'>
         <div style='padding-left: 10%'>
@@ -26,7 +25,6 @@ class XanderClient
       options = ""
       variants.each (i, y) =>
         options += " <td><button onclick='xander.showVariant(\"#{@titleFor(x)}\",\"#{$(y).attr('data-variant')}\"); return false'>#{$(y).attr('data-variant')}</button></td>"
-      console.log($(x).attr('id'))
 
       $('#__variantTable').append("<tr><th>#{@titleFor(x)}</th>#{options}</tr>")
       @slot_number+=1
@@ -35,7 +33,6 @@ class XanderClient
     $("*[data-css-variants]").each (i, x) =>
       variants = $(x).attr('data-css-variants').split(' ')
       options = ""
-      console.log("2", variants)
       $(variants).each (i, y) =>
         options += " <td><button onclick='xander.showCssVariant(\"#{@titleFor(x)}\",\"#{y}\"); return false'>#{y}</button></td>"
 
@@ -86,10 +83,9 @@ class XanderClient
     all_choices.each (i, x) =>
       if !$(x).attr('id')
         console.error("data-css-variants element is missing id")
-        console.error x
+        console.error x.outerHTML
         return
       options = $(x).attr('data-css-variants').split(' ')
-      console.log @xanderIOVariants
       if @xanderIOVariants
         option = @xanderIOVariants[$(x).attr('id')]
         if !option
@@ -245,6 +241,8 @@ class XanderClient
     url += "&chosen=#{encodeURIComponent(JSON.stringify(@variant()))}"
     url
 
+  # useVariant needs to have chooseVariant() and chooseCssVariant() called after 
+  # it.  It's expected to be called before $(document).ready by xander.io
   useVariant : (choices) ->
     @xanderIOVariants = choices
 
