@@ -110,6 +110,7 @@ $ ->
   test "Adding an API key includes xander professional edition", ->
     scripts = $("script").length
     xander.apiKey("test")
+    ok xander._apiKey == 'test', "Not keeping track of api key"
     ok scripts + 1 == $("script").length, "Not generating script tag for API"
 
   test "Add a tracking pixel on variants chosen", ->
@@ -122,6 +123,7 @@ $ ->
   test "Goal tracking should have uuid.", ->
     ok /user=/.test(xander.trackingPixelGoalPath('test')), "Goal Tracking pixel doesn't include user token"
     ok /goal=/.test(xander.trackingPixelGoalPath('test')), "Goal Tracking pixel doesn't include user token"
+    ok /apiKey=/.test(xander.trackingPixelGoalPath('test')), "Tracking pixel doesn't include user token"
 
   test "Tracking pixel path should include relevant information", ->
     ok /url=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include URL"
@@ -129,6 +131,7 @@ $ ->
     ok /all=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include variant options"
     ok /goals=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include goals"
     ok /user=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include user token"
+    ok /apiKey=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include user token"
 
   test "xander#useVariant should use a data variant if specified", ->
     xander.useVariant {useVariant:'b'}

@@ -118,6 +118,7 @@ class XanderClient
 
   apiKey : (key) ->
     $("head").append("<script src='#{@apiKeyPath(key)}'></script>")
+    @_apiKey = key
 
   goalReached : (goal) ->
     _gaq.push ['_trackPageview', goal]
@@ -231,6 +232,7 @@ class XanderClient
     url += "&all=#{encodeURIComponent(JSON.stringify(@allVariants()))}"
     url += "&goals=#{encodeURIComponent(JSON.stringify(@goals()))}"
     url += "&user=#{encodeURIComponent(@uuid())}"
+    url += "&apiKey=#{@_apiKey}" if @_apiKey
     url
 
   trackingPixelGoalPath : (goal) ->
@@ -239,6 +241,7 @@ class XanderClient
     url += "&user=#{encodeURIComponent(@uuid())}"
     url += "&goal=#{encodeURIComponent(goal)}"
     url += "&chosen=#{encodeURIComponent(JSON.stringify(@variant()))}"
+    url += "&apiKey=#{@_apiKey}" if @_apiKey
     url
 
   # useVariant needs to have chooseVariant() and chooseCssVariant() called after 
