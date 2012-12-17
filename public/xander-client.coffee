@@ -114,7 +114,7 @@ class XanderClient
         console?.error( "Supported types are a tags, submit inputs, forms.  Please check http://xander.io for more information")
 
   apiKeyPath : (key) ->
-    "http://variants.xander.io/#{key}/#{encodeURIComponent(window.location.host+window.location.pathname)}/chosen.js"
+    "http://variants.xander.io/#{encodeURIComponent(window.location.host+window.location.pathname)}.js"
 
   apiKey : (key) ->
     $("head").append("<script src='#{@apiKeyPath(key)}'></script>")

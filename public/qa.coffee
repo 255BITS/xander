@@ -105,7 +105,7 @@ $ ->
 
   # xander.io integration
   test "API key path correctness", ->
-    ok xander.apiKeyPath("test") == "http://variants.xander.io/test/localhost%3A2255%2Fqa.html/chosen.js"
+    ok xander.apiKeyPath("test") == "http://variants.xander.io/localhost%3A2255%2Fqa.html.js"
 
   test "Adding an API key includes xander professional edition", ->
     scripts = $("script").length
