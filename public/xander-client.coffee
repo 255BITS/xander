@@ -117,7 +117,8 @@ class XanderClient
     "http://variants.xander.io/#{encodeURIComponent(window.location.host+window.location.pathname)}.js"
 
   apiKey : (key) ->
-    $("head").append("<script src='#{@apiKeyPath(key)}'></script>")
+    $.getScript(@apiKeyPath(key)).done () =>
+      @addTrackingPixel()
     @_apiKey = key
 
   goalReached : (goal) ->
@@ -261,7 +262,7 @@ $ ->
   xander.chooseCssVariant()
   xander.wireGoals()
   xander.callAnalytics() unless getParameterByName('showVariants') == 'true'
-  xander.addTrackingPixel()
+  xander.addTrackingPixel() unless xander._apiKey
 
 window.xander = xander
 
