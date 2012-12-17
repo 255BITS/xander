@@ -119,7 +119,7 @@ class XanderClient
   apiKey : (key) ->
     timeout_id = window.setTimeout(() =>
       @addTrackingPixel()
-    , 250)
+    , 1000)
     $.getScript(@apiKeyPath(key)).done () =>
       @addTrackingPixel()
     @_apiKey = key
