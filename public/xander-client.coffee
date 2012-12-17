@@ -117,8 +117,9 @@ class XanderClient
     "http://variants.xander.io/#{encodeURIComponent(window.location.host+window.location.pathname)}.js"
 
   apiKey : (key) ->
-    $.getScript(@apiKeyPath(key)).done () =>
-      @addTrackingPixel()
+    $.getScript(@apiKeyPath(key)).done(() =>
+      @addTrackingPixel()).fail(() =>
+      @addTrackingPixel())
     @_apiKey = key
 
   goalReached : (goal) ->
