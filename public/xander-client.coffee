@@ -121,8 +121,8 @@ class XanderClient
       @addTrackingPixel()
     , 250)
     $.getScript(@apiKeyPath(key)).done () =>
-      @addTrackingPixel()
       window.clearTimeout(timeout_id)
+      @addTrackingPixel()
     @_apiKey = key
 
   goalReached : (goal) ->
