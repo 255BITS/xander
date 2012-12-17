@@ -233,6 +233,7 @@ class XanderClient
     url += "&goals=#{encodeURIComponent(JSON.stringify(@goals()))}"
     url += "&user=#{encodeURIComponent(@uuid())}"
     url += "&apiKey=#{@_apiKey}" if @_apiKey
+    url += "&variantType=#{@variantType}" if @variantType
     url
 
   trackingPixelGoalPath : (goal) ->
@@ -242,6 +243,7 @@ class XanderClient
     url += "&goal=#{encodeURIComponent(goal)}"
     url += "&chosen=#{encodeURIComponent(JSON.stringify(@variant()))}"
     url += "&apiKey=#{@_apiKey}" if @_apiKey
+    url += "&variantType=#{@variantType}" if @variantType
     url
 
   # useVariant needs to have chooseVariant() and chooseCssVariant() called after 
