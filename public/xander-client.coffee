@@ -121,7 +121,6 @@ class XanderClient
       @addTrackingPixel()
     , 250)
     $.getScript(@apiKeyPath(key)).done () =>
-      window.clearTimeout(timeout_id)
       @addTrackingPixel()
     @_apiKey = key
 
@@ -211,6 +210,8 @@ class XanderClient
     @trackingDisabled = true
 
   addTrackingPixel : ->
+    return false if @trackingExists
+    @trackingExists = true
     return false if @trackingDisabled
     i = new Image() 
     i.src = @trackingPixelPath()
