@@ -121,7 +121,7 @@ class XanderClient
     @_apiKey = key
 
   goalReached : (goal) ->
-    _gaq.push ['_trackPageview', goal]
+    _gaq?.push ['_trackPageview', goal]
     return false if @trackingDisabled
     i = new Image() 
     i.src = @trackingPixelGoalPath(goal)
@@ -140,7 +140,7 @@ class XanderClient
       chosen = $(x).attr('data-variant-chosen')
       @slot_number = $(x).attr('data-variant-slot')
       title = @titleFor(x)
-      _gaq.push ['_setCustomVar', parseInt(@slot_number), title,  chosen, 2 ] 
+      _gaq?.push ['_setCustomVar', parseInt(@slot_number), title,  chosen, 2 ] 
 
   # This rerolls the page into any variant except the current one
   # This is more useful for demo or testing than prod.
