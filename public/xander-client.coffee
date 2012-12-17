@@ -117,7 +117,7 @@ class XanderClient
     "http://variants.xander.io/#{encodeURIComponent(window.location.host+window.location.pathname)}.js"
 
   apiKey : (key) ->
-    timeout_id = window.setTimeout(() ->
+    timeout_id = window.setTimeout(() =>
       @addTrackingPixel()
     , 250)
     $.getScript(@apiKeyPath(key)).done () =>
