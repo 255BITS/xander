@@ -134,9 +134,10 @@ $ ->
     ok /apiKey=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include user token"
 
   test "xander#useVariant should use a data variant if specified", ->
-    xander.useVariant {useVariant:'b'}
+    xander.useVariant {useVariant:'b'}, 'best'
     xander.chooseVariant()
     xander.chooseCssVariant()
+    ok xander.variantType == 'best', 'useVariant second argument is where the traffic is sourced from (test or best)'
     ok $("#useVariant").attr('data-variant-chosen') == 'b', "chose wrong data variant"
 
   test "xander#useVariant should use a data-css variant if a css variant is specified", ->

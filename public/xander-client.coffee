@@ -246,8 +246,9 @@ class XanderClient
 
   # useVariant needs to have chooseVariant() and chooseCssVariant() called after 
   # it.  It's expected to be called before $(document).ready by xander.io
-  useVariant : (choices) ->
+  useVariant : (choices, variantType) ->
     @xanderIOVariants = choices
+    @variantType = variantType
 
 xander = new XanderClient()
 
