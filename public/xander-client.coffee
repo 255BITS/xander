@@ -210,9 +210,9 @@ class XanderClient
     @trackingDisabled = true
 
   addTrackingPixel : ->
-    return false if @trackingExists
-    @trackingExists = true
     return false if @trackingDisabled
+    return true if @trackingExists
+    @trackingExists = true
     i = new Image() 
     i.src = @trackingPixelPath()
     true
