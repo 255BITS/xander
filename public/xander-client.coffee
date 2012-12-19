@@ -117,8 +117,10 @@ class XanderClient
     "http://variants.xander.io/#{encodeURIComponent(window.location.host+window.location.pathname)}.js"
 
   apiKey : (key) ->
-    timeout_id = window.setTimeout(() =>
+    window.setTimeout(() =>
       @addTrackingPixel()
+      xander.chooseVariant()
+      xander.chooseCssVariant()
     , 1000)
     $.getScript(@apiKeyPath(key)).done () =>
       @addTrackingPixel()
@@ -266,11 +268,13 @@ xander = new XanderClient()
 $ ->
   xander.slot_number = xander.first_slot
   xander.showVariantBar() if getParameterByName('showVariants') == 'true'
-  xander.chooseVariant()
-  xander.chooseCssVariant()
+  unless xander._apiKey
+    xander.chooseVariant()
+    xander.chooseCssVariant()
+    xander.addTrackingPixel()
+  
   xander.wireGoals()
   xander.callAnalytics() unless getParameterByName('showVariants') == 'true'
-  xander.addTrackingPixel() unless xander._apiKey
 
 window.xander = xander
 
