@@ -257,6 +257,9 @@ class XanderClient
   useVariant : (choices, variantType) ->
     @xanderIOVariants = choices
     @variantType = variantType
+    $ =>
+      @chooseVariant()
+      @chooseCssVariant()
 
 xander = new XanderClient()
 
