@@ -52,7 +52,7 @@ class XanderClient
       el.removeClass y
     el.addClass klass
 
-  chooseVariant: ->
+  chooseVariant: (force=false) ->
     all_choices = $("*[data-variant]").parent()
     all_choices.each (i, x) =>
       variants = $(x).find("> [data-variant]")
@@ -63,7 +63,7 @@ class XanderClient
         console.error x.outerHTML
         return
       $(x).attr('data-variant-slot', @slot_number)
-      if @xanderIOVariants
+      if @xanderIOVariants && !force
         variant = @xanderIOVariants[$(x).attr('id')]
         $selected = $(x).find "> [data-variant=#{variant}]"
         if $selected.length == 0
@@ -78,7 +78,7 @@ class XanderClient
     if(all_choices.length > 5)
       console?.log "You have too many variants to track with Google Analytics!  Google Analytics limits the number of custom variable slots to 5."
 
-  chooseCssVariant: ->
+  chooseCssVariant: (force=false) ->
     all_choices = $("[data-css-variants]")
     all_choices.each (i, x) =>
       if !$(x).attr('id')
@@ -86,7 +86,7 @@ class XanderClient
         console.error x.outerHTML
         return
       options = $(x).attr('data-css-variants').split(' ')
-      if @xanderIOVariants
+      if @xanderIOVariants && !force
         option = @xanderIOVariants[$(x).attr('id')]
         if !option
           option = options[0]
@@ -176,8 +176,8 @@ class XanderClient
 
           
     else
-      @chooseVariant()
-      @chooseCssVariant()
+      @chooseVariant(true)
+      @chooseCssVariant(true)
 
   # Returns the current variant in JSON form
   variant : ->
