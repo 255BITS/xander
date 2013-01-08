@@ -114,7 +114,7 @@ class XanderClient
         console?.error( "Supported types are a tags, submit inputs, forms.  Please check http://xander.io for more information")
 
   apiKeyPath : (key) ->
-    "http://variants.xander.io/#{encodeURIComponent(window.location.host+window.location.pathname)}.js"
+    "http://255bits.cloudant.com/variants/_design/variants/_show/next/#{encodeURIComponent(window.location.host+window.location.pathname)}.js"
 
   apiKey : (key) ->
     window.setTimeout(() =>
