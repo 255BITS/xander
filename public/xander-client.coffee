@@ -242,9 +242,9 @@ class XanderClient
   trackingPixelPath : ->
     url = "http://track.xander.io/impression.gif?"
     url += "url=#{encodeURIComponent(window.location.host+window.location.pathname)}"
-    url += "&chosen=#{encodeURIComponent(JSON.stringify(@variant()))}"
-    url += "&all=#{encodeURIComponent(JSON.stringify(@allVariants()))}"
-    url += "&goals=#{encodeURIComponent(JSON.stringify(@goals()))}"
+    url += "&chosen=#{encodeURIComponent(@stringify(@variant()))}"
+    url += "&all=#{encodeURIComponent(@stringify(@allVariants()))}"
+    url += "&goals=#{encodeURIComponent(@stringify(@goals()))}"
     url += "&user=#{encodeURIComponent(@uuid())}"
     url += "&apiKey=#{@_apiKey}" if @_apiKey
     url += "&variantType=#{@variantType}" if @variantType
@@ -255,7 +255,7 @@ class XanderClient
     url += "url=#{encodeURIComponent(window.location.host+window.location.pathname)}"
     url += "&user=#{encodeURIComponent(@uuid())}"
     url += "&goal=#{encodeURIComponent(goal)}"
-    url += "&chosen=#{encodeURIComponent(JSON.stringify(@variant()))}"
+    url += "&chosen=#{encodeURIComponent(@stringify(@variant()))}"
     url += "&apiKey=#{@_apiKey}" if @_apiKey
     url += "&variantType=#{@variantType}" if @variantType
     url
@@ -267,6 +267,32 @@ class XanderClient
     @variantType = variantType
     $ =>
       @updateVariant()
+
+  # Json stringify from http://stackoverflow.com/questions/5093582/json-is-undefined-error-in-ie-only
+  stringify : (obj, force=false) ->
+    return JSON.stringify(obj) if JSON?.stringify && !force
+    t = typeof (obj)
+    if t isnt "object" or obj is null
+      # simple data type
+      obj = "\"" + obj + "\""  if t is "string"
+      String obj
+    else
+
+      # recurse array or object
+      n = undefined
+      v = undefined
+      json = []
+      arr = (obj and obj.constructor is Array)
+      for n of obj
+        v = obj[n]
+        t = typeof (v)
+        if t is "string"
+          v = "\"" + v + "\""
+        else v = JSON.stringify(v)  if t is "object" and v isnt null
+        json.push ((if arr then "" else "\"" + n + "\":")) + String(v)
+      ((if arr then "[" else "{")) + String(json) + ((if arr then "]" else "}"))
+        
+
 
 xander = new XanderClient()
 

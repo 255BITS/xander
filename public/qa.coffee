@@ -177,3 +177,17 @@ $ ->
     xander.xanderIOVariants = undefined
     xander.updateVariant()
     ok chosen, "onvariant timeout didn't fire"
+
+  test "stringify", ->
+    obj = {a: 'b'}
+    assert.equal JSON.stringify(obj), xander.stringify(obj, true)
+    obj = [1,2,3]
+    assert.equal JSON.stringify(obj), xander.stringify(obj, true)
+    obj = "somestring"
+    assert.equal JSON.stringify(obj), xander.stringify(obj, true)
+    obj = {a: [1,2,3]}
+    assert.equal JSON.stringify(obj), xander.stringify(obj, true)
+    obj = null
+    assert.equal JSON.stringify(obj), xander.stringify(obj, true)
+
+
