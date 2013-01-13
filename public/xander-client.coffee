@@ -1,3 +1,40 @@
+# Xander is MIT licensed
+
+# Old browser support for localStorage.  Taken and modified from:
+# https://github.com/wojodesign/local-storage-js
+(->
+  window = this
+  unless window.localStorage
+    # non-standard: Firefox 2+
+    if window.globalStorage
+      try
+        window.localStorage = window.globalStorage
+      return
+    # non-standard: IE 5+
+    div = document.createElement("div")
+    attrKey = "localStorage"
+    div.style.display = "none"
+    document.getElementsByTagName("head")[0].appendChild div
+    if div.addBehavior
+      div.addBehavior "#default#userdata"
+      localStorage = window["localStorage"] =
+        length: 0
+        setItem: (key, value) ->
+          div.load attrKey
+          @length++  unless div.getAttribute(key)
+          div.setAttribute key, value
+          div.save attrKey
+        getItem: (key) ->
+          div.load attrKey
+          div.getAttribute key
+      div.load attrKey
+      localStorage["length"] = div.XMLDocument.documentElement.attributes.length
+)()
+
+console = { error: (e) -> } unless console # IE <= 7
+
+# This will parse the query string and return a param within it.
+# Used for showVariants=true
 getParameterByName = (name) ->
   name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]")
   regexS = "[\\?&]" + name + "=([^&#]*)"
@@ -75,8 +112,6 @@ class XanderClient
         chosen = $(variants[parseInt(Math.random() * variants.length)]).show()
         $(x).attr('data-variant-chosen', chosen.attr('data-variant'))
       @slot_number += 1
-    if(all_choices.length > 5)
-      console?.log "You have too many variants to track with Google Analytics!  Google Analytics limits the number of custom variable slots to 5."
 
   chooseCssVariant: (force) ->
     all_choices = $("[data-css-variants]")
@@ -118,8 +153,8 @@ class XanderClient
         x.submit ->
           xander.goalReached(goal)
       else
-        console?.error("[Xander] Error: no idea what to do with the goal defined on this element:", x)
-        console?.error( "Supported types are a tags, submit inputs, forms.  Please check http://xander.io for more information")
+        console.error("[Xander] Error: no idea what to do with the goal defined on this element:", x)
+        console.error( "Supported types are a tags, submit inputs, forms.  Please check http://xander.io for more information")
 
   apiKeyPath : (key) ->
     "http://255bits.cloudant.com/variants/_design/variants/_show/next/#{encodeURIComponent(window.location.host+window.location.pathname)}.js"
@@ -297,14 +332,15 @@ class XanderClient
 xander = new XanderClient()
 
 $ ->
+  shouldShowVariants = getParameterByName('showVariants') == 'true'
   xander.slot_number = xander.first_slot
-  xander.showVariantBar() if getParameterByName('showVariants') == 'true'
+  xander.showVariantBar() if shouldShowVariants 
   unless xander._apiKey
     xander.updateVariant()
     xander.addTrackingPixel()
   
   xander.wireGoals()
-  xander.callAnalytics() unless getParameterByName('showVariants') == 'true'
+  xander.callAnalytics() unless shouldShowVariants
 
 window.xander = xander
 

@@ -190,4 +190,3 @@ $ ->
     obj = null
     assert.equal JSON.stringify(obj), xander.stringify(obj, true)
 
-
