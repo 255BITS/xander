@@ -110,6 +110,30 @@ You can now call a rerollVariants method to get a whole new version of your site
   xander.reroll($("#choices")); // reroll the #choices variant
 ```
 
+## Event Handlers
+
+### onVariantChosen(callback)
+
+`variant` is an object that looks like:
+```js
+{
+  'section id' : 'chosen variant'
+}
+```
+
+#### Usage
+
+This allows you to execute custom javascript
+for specific variants
+
+```js
+xander.onVariantChosen(function(variant) {
+  if (variant.signup === 'red-button') {
+    // Execute custom javascript for the red button variant of signup
+  }
+});
+```
+
 # Commercial offerings
 
 If you like xander, but don't like the sample distribution using Math.rand() - or don't like having to review your variant's performance, check out [xander.io](http://xander.io) .  It's a SAAS that uses 90/10 testing to figure out your best performing variant (with a friendly UI).

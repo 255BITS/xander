@@ -105,7 +105,8 @@ $ ->
 
   # xander.io integration
   test "API key path correctness", ->
-    ok xander.apiKeyPath("test") == "http://255bits.cloudant.com/variants/_design/variants/_show/next/localhost%3A2255%2Fqa.html.js"
+    host = encodeURIComponent window.location.host
+    ok xander.apiKeyPath("test") == "http://255bits.cloudant.com/variants/_design/variants/_show/next/#{host}%2Fqa.html.js"
 
   test "Adding an API key includes xander professional edition", ->
     scripts = $("script").length
@@ -158,7 +159,21 @@ $ ->
     xander.useVariant {useVariant:'non-exist'}
     ok $("#useVariant").attr('data-variant-chosen') == 'a', "0-th index data variant not chosen"
 
-   test "xander#useVariant invalid data css variant should default to 0-th index", ->
+  test "xander#useVariant invalid data css variant should default to 0-th index", ->
     xander.useVariant {useVariantCSS:'non-exist'}
     ok $("#useVariant").attr('data-variant-chosen') == 'a', "0-th index data variant not chosen"
     
+
+  test "onVariantChosen fires every time chooseVariant is called", ->
+    chosen = null
+    xander.onVariantChosen (v) -> chosen = v
+    xander.useVariant {useVariant:'b'}
+    ok chosen.useVariant == 'b', "onvariant chosen not firing"
+    
+  test "onVariantChosen fires on timeout", ->
+    chosen = false
+    xander.onVariantChosen (v) -> chosen = true
+    xander.variantType = undefined
+    xander.xanderIOVariants = undefined
+    xander.updateVariant()
+    ok chosen, "onvariant timeout didn't fire"

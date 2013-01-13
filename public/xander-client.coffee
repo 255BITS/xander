@@ -52,7 +52,7 @@ class XanderClient
       el.removeClass y
     el.addClass klass
 
-  chooseVariant: (force=false) ->
+  chooseVariant: (force) ->
     all_choices = $("*[data-variant]").parent()
     all_choices.each (i, x) =>
       variants = $(x).find("> [data-variant]")
@@ -78,7 +78,7 @@ class XanderClient
     if(all_choices.length > 5)
       console?.log "You have too many variants to track with Google Analytics!  Google Analytics limits the number of custom variable slots to 5."
 
-  chooseCssVariant: (force=false) ->
+  chooseCssVariant: (force) ->
     all_choices = $("[data-css-variants]")
     all_choices.each (i, x) =>
       if !$(x).attr('id')
@@ -98,6 +98,14 @@ class XanderClient
       $(x).show().attr 'data-variant-slot', @slot_number
       $(x).show().attr 'data-variant-chosen', option
       @slot_number += 1
+
+  updateVariant : (force=false) ->
+    @chooseVariant(force)
+    @chooseCssVariant(force)
+    @onVariantChosenCallback(@variant()) if @onVariantChosenCallback
+
+  onVariantChosen : (callback) ->
+    @onVariantChosenCallback = callback
 
   wireGoals: ->
     $("*[data-goal]").each (i, x) ->
@@ -119,8 +127,7 @@ class XanderClient
   apiKey : (key) ->
     window.setTimeout(() =>
       @addTrackingPixel()
-      xander.chooseVariant()
-      xander.chooseCssVariant()
+      xander.updateVariant()
     , 1000)
     $.getScript(@apiKeyPath(key)).done () =>
       @addTrackingPixel()
@@ -176,8 +183,7 @@ class XanderClient
 
           
     else
-      @chooseVariant(true)
-      @chooseCssVariant(true)
+      xander.updateVariant(true)
 
   # Returns the current variant in JSON form
   variant : ->
@@ -260,8 +266,7 @@ class XanderClient
     @xanderIOVariants = choices
     @variantType = variantType
     $ =>
-      @chooseVariant()
-      @chooseCssVariant()
+      @updateVariant()
 
 xander = new XanderClient()
 
@@ -269,8 +274,7 @@ $ ->
   xander.slot_number = xander.first_slot
   xander.showVariantBar() if getParameterByName('showVariants') == 'true'
   unless xander._apiKey
-    xander.chooseVariant()
-    xander.chooseCssVariant()
+    xander.updateVariant()
     xander.addTrackingPixel()
   
   xander.wireGoals()
