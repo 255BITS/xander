@@ -323,7 +323,7 @@ class XanderClient
         t = typeof (v)
         if t is "string"
           v = "\"" + v + "\""
-        else v = JSON.stringify(v)  if t is "object" and v isnt null
+        else v = @stringify(v)  if t is "object" and v isnt null
         json.push ((if arr then "" else "\"" + n + "\":")) + String(v)
       ((if arr then "[" else "{")) + String(json) + ((if arr then "]" else "}"))
         
