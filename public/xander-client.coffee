@@ -8,23 +8,23 @@ if typeof window.localStorage != 'object'
   if typeof window.globalStorage == 'object'
     try
       localStorage = window.globalStorage
-    return
-  # non-standard: IE 5+
-  div = document.createElement("div")
-  attrKey = "localStorage"
-  div.style.display = "none"
-  document.getElementsByTagName("head")[0].appendChild div
-  if div.addBehavior
-    div.addBehavior "#default#userdata"
-    localStorage = 
-      setItem: (key, value) ->
-        div.load attrKey
-        div.setAttribute key, value
-        div.save attrKey
-      getItem: (key) ->
-        div.load attrKey
-        div.getAttribute key
-    div.load attrKey
+  else
+    # non-standard: IE 5+
+    div = document.createElement("div")
+    attrKey = "localStorage"
+    div.style.display = "none"
+    document.getElementsByTagName("head")[0].appendChild div
+    if div.addBehavior
+      div.addBehavior "#default#userdata"
+      localStorage = 
+        setItem: (key, value) ->
+          div.load attrKey
+          div.setAttribute key, value
+          div.save attrKey
+        getItem: (key) ->
+          div.load attrKey
+          div.getAttribute key
+      div.load attrKey
 else
   localStorage = window.localStorage
 
