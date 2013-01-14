@@ -15,6 +15,12 @@ Multivariate Testing in JavaScript made easy.  Also see [xander.io](http://xande
 * Google Analytics 
 * jQuery
 
+## Browser support:
+Xander has been tested and supports:
+* Internet Explorer 6 and above
+* Firefox 2 and above
+* All modern browsers
+
 ## Installation
 
 * Include xander-client javascript file
