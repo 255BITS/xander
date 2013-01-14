@@ -1,32 +1,32 @@
 # Xander is MIT licensed
 
+localStorage = null
 # Old browser support for localStorage.  Taken and modified from:
 # https://github.com/wojodesign/local-storage-js
-(->
-  window = this
-  if typeof window.localStorage != 'object'
-    # non-standard: Firefox 2+
-    if typeof window.globalStorage == 'object'
-      try
-        window.localStorage = window.globalStorage
-      return
-    # non-standard: IE 5+
-    div = document.createElement("div")
-    attrKey = "localStorage"
-    div.style.display = "none"
-    document.getElementsByTagName("head")[0].appendChild div
-    if div.addBehavior
-      div.addBehavior "#default#userdata"
-      window.localStorage = 
-        setItem: (key, value) ->
-          div.load attrKey
-          div.setAttribute key, value
-          div.save attrKey
-        getItem: (key) ->
-          div.load attrKey
-          div.getAttribute key
-      div.load attrKey
-)()
+if typeof window.localStorage != 'object'
+  # non-standard: Firefox 2+
+  if typeof window.globalStorage == 'object'
+    try
+      localStorage = window.globalStorage
+    return
+  # non-standard: IE 5+
+  div = document.createElement("div")
+  attrKey = "localStorage"
+  div.style.display = "none"
+  document.getElementsByTagName("head")[0].appendChild div
+  if div.addBehavior
+    div.addBehavior "#default#userdata"
+    localStorage = 
+      setItem: (key, value) ->
+        div.load attrKey
+        div.setAttribute key, value
+        div.save attrKey
+      getItem: (key) ->
+        div.load attrKey
+        div.getAttribute key
+    div.load attrKey
+else
+  localStorage = window.localStorage
 
 console = { error: (e) -> } unless console # IE <= 7
 
