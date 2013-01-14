@@ -4,9 +4,9 @@
 # https://github.com/wojodesign/local-storage-js
 (->
   window = this
-  unless window.localStorage
+  if typeof window.localStorage != 'object'
     # non-standard: Firefox 2+
-    if window.globalStorage
+    if typeof window.globalStorage == 'object'
       try
         window.localStorage = window.globalStorage
       return
