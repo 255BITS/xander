@@ -17,18 +17,15 @@
     document.getElementsByTagName("head")[0].appendChild div
     if div.addBehavior
       div.addBehavior "#default#userdata"
-      localStorage = window["localStorage"] =
-        length: 0
+      window.localStorage = 
         setItem: (key, value) ->
           div.load attrKey
-          @length++  unless div.getAttribute(key)
           div.setAttribute key, value
           div.save attrKey
         getItem: (key) ->
           div.load attrKey
           div.getAttribute key
       div.load attrKey
-      localStorage["length"] = div.XMLDocument.documentElement.attributes.length
 )()
 
 console = { error: (e) -> } unless console # IE <= 7
