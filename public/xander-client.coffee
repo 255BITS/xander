@@ -1,13 +1,13 @@
 # Xander is MIT licensed
 
-localStorage = null
+storage = null
 # Old browser support for localStorage.  Taken and modified from:
 # https://github.com/wojodesign/local-storage-js
 if typeof window.localStorage != 'object'
   # non-standard: Firefox 2+
   if typeof window.globalStorage == 'object'
     try
-      localStorage = window.globalStorage
+      storage = window.globalStorage
   else
     # non-standard: IE 5+
     div = document.createElement("div")
@@ -16,7 +16,7 @@ if typeof window.localStorage != 'object'
     document.getElementsByTagName("head")[0].appendChild div
     if div.addBehavior
       div.addBehavior "#default#userdata"
-      localStorage = 
+      storage = 
         setItem: (key, value) ->
           div.load attrKey
           div.setAttribute key, value
@@ -26,7 +26,7 @@ if typeof window.localStorage != 'object'
           div.getAttribute key
       div.load attrKey
 else
-  localStorage = window.localStorage
+  storage = window.localStorage
 
 error = (e) -> console?.error e
 
@@ -172,7 +172,7 @@ class XanderClient
     return true
 
   clearGoals : () ->
-    localStorage.setItem("goalsToSync","")
+    storage.setItem("goalsToSync","")
 
   goalsPush : (goal) ->
     goals = @goalsToSync()
@@ -180,11 +180,11 @@ class XanderClient
       goals.push(goal)
     else
       goals = [goal]
-    localStorage.setItem("goalsToSync", goals.join(';'))
+    storage.setItem("goalsToSync", goals.join(';'))
     goals
 
   goalsToSync : () ->
-    result = localStorage.getItem("goalsToSync")
+    result = storage.getItem("goalsToSync")
     return [] unless result
     return result.split(';') unless result == ''
     return []
@@ -285,7 +285,7 @@ class XanderClient
 
   uuid : ->
     return @uid if @uid
-    @uid = localStorage.getItem('uuid')
+    @uid = storage.getItem('uuid')
     return @uid if @uid
 
     # courtesy of the insane genius broofa at http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
@@ -294,7 +294,7 @@ class XanderClient
       v = if c == 'x' then r else (r&0x3|0x8)
       v.toString(16)
     
-    localStorage.setItem('uuid', @uid)
+    storage.setItem('uuid', @uid)
     @uid
 
   trackingPixelPath : ->
