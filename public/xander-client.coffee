@@ -168,7 +168,7 @@ class XanderClient
   goalReached : (goal) ->
     @goalsPush(goal)
     sync = => @syncGoals()
-    setTimeout(sync, 10)
+    setTimeout(sync, 100)
     return true
 
   clearGoals : () ->
