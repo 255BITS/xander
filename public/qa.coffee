@@ -1,4 +1,5 @@
 $ ->
+
   test "Only one subsection is visible in a given section", ->
     numberVisible = 0
     $("#test1 > [data-variant]").each (i,x) ->
@@ -23,27 +24,6 @@ $ ->
   test "Ensuring proper chosen variant name", ->
     ok $("#test1").attr('data-variant-chosen').length > 0, 'variant-chosen not populated'
     ok $("#test3").attr('data-variant-chosen').length > 0, 'css-variant-chosen not populated'
-
-  # Goals
-  test "Goals should be enabled on form button clicks", ->
-    $("#test6btn").click()
-    ok _gaq[_gaq.length-1][0] == "_trackPageview", "Wrong event type in _gaq for goal"
-    ok _gaq[_gaq.length-1][1] == "test6", "Wrong goal name in _gaq"
-  test "Goals should be enabled on form submits", ->
-    $("#test7form").submit()
-    ok _gaq[_gaq.length-1][0] == "_trackPageview", "Wrong event type in _gaq for goal"
-    ok _gaq[_gaq.length-1][1] == "test7", "Wrong goal name in _gaq"
-  test "Goals should be enabled on <a> tags", ->
-    $("#test8atag").click()
-    ok _gaq[_gaq.length-1][0] == "_trackPageview", "Wrong event type in _gaq for goal"
-    ok _gaq[_gaq.length-1][1] == "test8", "Wrong goal name in _gaq"
-  test "Goals should work on <button tags>", ->
-    $("#test9button").click()
-    ok _gaq[_gaq.length-1][0] == "_trackPageview", "eventtype for button tag incorrect."
-    ok _gaq[_gaq.length-1][1] == 'test9', 'Wrong goal name in _gaq'
-
-  test "Goals should serialize", ->
-    ok xander.goals().length > 0, "There are no goals listed."
 
   # TODO test "Javascript onclick events should still occur", ->
 
@@ -190,3 +170,64 @@ $ ->
     obj = null
     assert.equal JSON.stringify(obj), xander.stringify(obj, true)
 
+    
+  # GA Goals 
+  # No change in window.location
+
+  verifyGaq = (name) ->
+    console.log xander.goalsToSync()
+    xander.syncGoals()
+    assert.deepEqual _gaq[_gaq.length-1], ["_trackPageview", name], "Wrong event type in _gaq for goal #{name}"
+    
+  test "Goals should be enabled on form button clicks ( where onsubmit = '... return false' ) ", ->
+    $("#test6btn").click()
+    verifyGaq 'test6'
+    
+  test "Goals should be enabled on form submits ( where onsubmit = '... return false' ) ", ->
+    $("#test7form").submit()
+    verifyGaq 'test7'
+  test "Goals should be enabled on <a> tags without href", ->
+    $("#test8atag").click()
+    verifyGaq 'test8'
+  test "Goals should work on <button tags> without page redirection", ->
+    $("#test9button").click()
+    verifyGaq 'test9'
+
+
+  # Xander.io Goals
+  # No change in window.location
+  verifyGoal = ->
+    assert.equal xander.goalsToSync().length, 1
+    xander.syncGoals()
+    assert.equal xander.goalsToSync().length, 0
+    
+  test "Goals should be enabled on form button clicks ( where onsubmit = '... return false' ) ", ->
+    $("#test6btn").click()
+    verifyGoal()
+  test "Goals should be enabled on form submits ( where onsubmit = '... return false' ) ", ->
+    $("#test7form").submit()
+    verifyGoal()
+  test "Goals should be enabled on <a> tags without href", ->
+    $("#test8atag").click()
+    verifyGoal()
+  test "Goals should work on <button tags> without page redirection", ->
+    $("#test9button").click()
+    verifyGoal()
+
+  # Simulate arriving from a change in window.location
+  test "Goals should fire on load", ->
+    xander.goalsPush('test')
+    assert.equal xander.goalsToSync().length, 1
+    xander.syncGoals()
+    assert.equal xander.goalsToSync().length, 0
+
+
+  test "Goals should serialize", ->
+    ok xander.goals().length > 0, "There are no goals listed."
+
+
+  test "goalsToSync should be an empty array when localStorage is null", ->
+    localStorage.setItem('goalsToSync', '')
+    assert.deepEqual xander.goalsToSync(), []
+    localStorage.removeItem 'goalsToSync'
+    assert.deepEqual xander.goalsToSync(), []

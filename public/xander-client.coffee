@@ -28,7 +28,7 @@ if typeof window.localStorage != 'object'
 else
   localStorage = window.localStorage
 
-console = { error: (e) -> } unless console # IE <= 7
+error = (e) -> console?.error e
 
 # This will parse the query string and return a param within it.
 # Used for showVariants=true
@@ -93,8 +93,8 @@ class XanderClient
       variants.hide()
       # the user forgot to name the section or containing div
       if !$(x).attr('id')
-        console.error("Could not find parent id for data-variant")
-        console.error x.outerHTML
+        error("Could not find parent id for data-variant")
+        error x.outerHTML
         return
       $(x).attr('data-variant-slot', @slot_number)
       if @xanderIOVariants && !force
@@ -114,8 +114,8 @@ class XanderClient
     all_choices = $("[data-css-variants]")
     all_choices.each (i, x) =>
       if !$(x).attr('id')
-        console.error("data-css-variants element is missing id")
-        console.error x.outerHTML
+        error("data-css-variants element is missing id")
+        error x.outerHTML
         return
       options = $(x).attr('data-css-variants').split(' ')
       if @xanderIOVariants && !force
@@ -150,8 +150,8 @@ class XanderClient
         x.submit ->
           xander.goalReached(goal)
       else
-        console.error("[Xander] Error: no idea what to do with the goal defined on this element:", x)
-        console.error( "Supported types are a tags, submit inputs, forms.  Please check http://xander.io for more information")
+        error("[Xander] Error: no idea what to do with the goal defined on this element:", x)
+        error( "Supported types are a tags, submit inputs, forms.  Please check http://xander.io for more information")
 
   apiKeyPath : (key) ->
     "http://255bits.cloudant.com/variants/_design/variants/_show/next/#{encodeURIComponent(window.location.host+window.location.pathname)}.js"
@@ -166,11 +166,36 @@ class XanderClient
     @_apiKey = key
 
   goalReached : (goal) ->
-    _gaq?.push ['_trackPageview', goal]
-    return false if @trackingDisabled
-    i = new Image() 
-    i.src = @trackingPixelGoalPath(goal)
+    @goalsPush(goal)
+    sync = => @syncGoals()
+    setTimeout(sync, 10)
     return true
+
+  clearGoals : () ->
+    localStorage.setItem("goalsToSync","")
+
+  goalsPush : (goal) ->
+    goals = @goalsToSync()
+    if goals
+      goals.push(goal)
+    else
+      goals = [goal]
+    localStorage.setItem("goalsToSync", goals.join(';'))
+    goals
+
+  goalsToSync : () ->
+    result = localStorage.getItem("goalsToSync")
+    return [] unless result
+    return result.split(';') unless result == ''
+    return []
+
+  syncGoals : () ->
+    for goal in @goalsToSync()
+      _gaq?.push ['_trackPageview', goal]
+      continue if @trackingDisabled # No Xander.io tracking for those who opt-out
+      i = new Image() 
+      i.src = @trackingPixelGoalPath(goal)
+    @clearGoals()
 
   titleFor : (e) ->
     id = $(e).attr 'id'
@@ -199,6 +224,7 @@ class XanderClient
           if $(variant).attr('data-variant')==chosen
             variants.splice i, 1
             break
+
         $chosen = $(variants[parseInt(Math.random() * variants.length)]).show()
         $target.attr('data-variant-chosen', $chosen.attr('data-variant'))
       else 
@@ -338,6 +364,7 @@ $ ->
   
   xander.wireGoals()
   xander.callAnalytics() unless shouldShowVariants
+  xander.syncGoals() # Sync goals tracked from previous pages
 
 window.xander = xander
 

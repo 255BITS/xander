@@ -78,9 +78,18 @@ Goals are a simple way to track conversions.  In Google Analytics they correlate
   </form>
 ```
 
+#### Potential Pitfall
+
+Be careful when using cross-domain links that redirect the browser, xander may not get a chance to 
+fire the `goal reached` event.  This is not a concern if the goal targets a new window.
+
+
+### Technical Details of Goals
+
 Goals in Xander work by binding to an element's jquery click event (or submit event in the case of a form).  
 
-If you can't get the goal to trigger - console.log is your friend.  Open up your console and you will see some messages from xander when your page is setup and again when a goal is pressed.
+If you can't get the goal to trigger - console.log is your friend.  Open up your console and you will see some 
+messages from xander when your page is setup and again when a goal is pressed.
 
 If all else fails, you can call:
 
