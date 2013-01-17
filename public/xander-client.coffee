@@ -210,6 +210,7 @@ class XanderClient
       chosen = $(x).attr('data-variant-chosen')
       @slot_number = $(x).attr('data-variant-slot')
       title = @titleFor(x)
+      console.log "Custom Vars:", ['_setCustomVar', parseInt(@slot_number), title,  chosen, 2 ]  
       _gaq?.push ['_setCustomVar', parseInt(@slot_number), title,  chosen, 2 ] 
 
   # This rerolls the page into any variant except the current one

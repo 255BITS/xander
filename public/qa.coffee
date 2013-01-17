@@ -231,3 +231,42 @@ $ ->
     assert.deepEqual xander.goalsToSync(), []
     localStorage.removeItem 'goalsToSync'
     assert.deepEqual xander.goalsToSync(), []
+
+
+  # Customer Segmentation
+  test ".segment should add to the user segments.", ->
+    xander.clearSegments()
+    assert.deepEqual [], xander.userSegments()
+    xander.segment "Redditor", {subreddit: '/r/programming'}
+    xander.deepEqual [["Redditor", {subreddit: '/r/programming'}]], xander.userSegments()
+    # Unique adds attributes
+    xander.segment "Redditor", {likes: 'cats'}
+    xander.deepEqual [["Redditor", {subreddit: '/r/programming', likes: 'cats'}]], xander.userSegments()
+
+    xander.segment "Plumber", {}
+    xander.deepEqual [["Plumber"],["Redditor", {subreddit: '/r/programming', likes: 'cats'}]], xander.userSegments()
+
+  # Referral
+  test ".referral should check for regex", ->
+    xander.referralCallbacks = []
+    found = false
+    xander.refferal /news.ycombinator.com/, ->
+      found = true
+    xander.segmentReferralURL("http://news.ycombinator.com/post")
+    ok found, "Couldn't find referral for regex"
+
+  test ".referral should check for strings", ->
+    found = false
+    xander.refferal "news.ycombinator.com", ->
+      found = true
+    xander.segmentReferralURL "http://news.ycombinator.com"
+
+    ok found, "Couldn't find referral for string"
+
+    found = false
+    xander.segmentReferralURL "http://news.ycombinator.com/subpath"
+
+    ok !found, "String should match exactly."
+
+  # test ".referral should only run the first item found", ->
+
