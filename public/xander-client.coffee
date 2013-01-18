@@ -44,7 +44,6 @@ getParameterByName = (name) ->
 class XanderClient
   constructor: ->
     @first_slot = 1
-    @slot_number = 1
   showVariantBar : ->
     $('body').prepend """
       <div id='__variants' style='width: 100%; background: black; color: white; border-bottom: 5px solid #CCC'>
@@ -132,6 +131,7 @@ class XanderClient
       @slot_number += 1
 
   updateVariant : (force=false) ->
+    @slot_number = @first_slot
     @chooseVariant(force)
     @chooseCssVariant(force)
     @onVariantChosenCallback(@variant()) if @onVariantChosenCallback
@@ -157,11 +157,14 @@ class XanderClient
     "http://255bits.cloudant.com/variants/_design/variants/_show/next/#{encodeURIComponent(window.location.host+window.location.pathname)}.js"
 
   apiKey : (key) ->
+    timeout = true
     window.setTimeout(() =>
+      return unless timeout
       @addTrackingPixel()
       xander.updateVariant()
     , 1000)
     $.getScript(@apiKeyPath(key)).done () =>
+      timeout = false
       @addTrackingPixel()
     @_apiKey = key
 
@@ -318,8 +321,7 @@ class XanderClient
     url += "&variantType=#{@variantType}" if @variantType
     url
 
-  # useVariant needs to have chooseVariant() and chooseCssVariant() called after 
-  # it.  It's expected to be called before $(document).ready by xander.io
+  # UseVariant is expected to be called before $(document).ready by xander.io
   useVariant : (choices, variantType) ->
     @xanderIOVariants = choices
     @variantType = variantType

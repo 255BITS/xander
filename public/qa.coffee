@@ -231,3 +231,16 @@ $ ->
     assert.deepEqual xander.goalsToSync(), []
     localStorage.removeItem 'goalsToSync'
     assert.deepEqual xander.goalsToSync(), []
+
+
+  # setCustomVar tests for _gaq
+  test "callAnalytics should setup _gaqs custom variables", ->
+    ok $("*[data-variant-slot]").length > 0, "data-variants not setup"
+    window._gaq = []
+    xander.callAnalytics()
+    ok window._gaq.length > 1, "_gaq doesn't have data."
+
+  test "multiple calls to updateVariant should maintain the same slot number", ->
+    assert.equal 1, $("#test1").attr("data-variant-slot")
+    xander.updateVariant()
+    assert.equal 1, $("#test1").attr("data-variant-slot")
