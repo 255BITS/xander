@@ -327,6 +327,7 @@ class XanderClient
     @variantType = variantType
     $ =>
       @updateVariant()
+      @callAnalytics()
 
   # Json stringify from http://stackoverflow.com/questions/5093582/json-is-undefined-error-in-ie-only
   stringify : (obj, force=false) ->
