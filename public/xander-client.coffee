@@ -211,9 +211,9 @@ class XanderClient
   callAnalytics : ->
     $("*[data-variant-slot]").each (i, x) =>
       chosen = $(x).attr('data-variant-chosen')
-      @slot_number = $(x).attr('data-variant-slot')
+      slot = parseInt($(x).attr('data-variant-slot'), 10)
       title = @titleFor(x)
-      _gaq?.push ['_setCustomVar', parseInt(@slot_number), title,  chosen, 2 ] 
+      _gaq?.push ['_setCustomVar', slot, title,  chosen, 2 ] if slot <= 5 # Google Analytics only supports 5 custom variables. 
 
   # This rerolls the page into any variant except the current one
   # This is more useful for demo or testing than prod.
