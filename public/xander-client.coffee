@@ -119,7 +119,9 @@ class XanderClient
       options = $(x).attr('data-css-variants').split(' ')
       if @xanderIOVariants && !force
         option = @xanderIOVariants[$(x).attr('id')]
-        if !option
+        # Make sure the data-css option actually exists on the page.  
+        # This prevents useVariant() from invalid selections.
+        if !option || $.inArray(option, options) == -1
           option = options[0]
       else
         option = options[parseInt(Math.random() * options.length)]

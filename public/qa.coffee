@@ -114,6 +114,9 @@ $ ->
     ok /user=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include user token"
     ok /apiKey=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include user token"
 
+  # useVariant takes a hashmap and specifically uses a variant, even through rerolls (unless forced).
+  #
+  # It cannot use a non-existant variant though.
   test "xander#useVariant should use a data variant if specified", ->
     xander.useVariant {useVariant:'b'}, 'best'
     xander.chooseVariant()
@@ -141,9 +144,10 @@ $ ->
 
   test "xander#useVariant invalid data css variant should default to 0-th index", ->
     xander.useVariant {useVariantCSS:'non-exist'}
-    ok $("#useVariant").attr('data-variant-chosen') == 'a', "0-th index data variant not chosen"
+    ok $("#useVariantCSS").attr('data-variant-chosen') == 'a', "0-th index data variant not chosen"
+    ok !$("#useVariantCSS").hasClass('non-exist'), 'non existant class added.'
+    ok $("#useVariantCSS").hasClass('a')
     
-
   test "onVariantChosen fires every time chooseVariant is called", ->
     chosen = null
     xander.onVariantChosen (v) -> chosen = v
@@ -221,10 +225,8 @@ $ ->
     xander.syncGoals()
     assert.equal xander.goalsToSync().length, 0
 
-
   test "Goals should serialize", ->
     ok xander.goals().length > 0, "There are no goals listed."
-
 
   test "goalsToSync should be an empty array when localStorage is null", ->
     localStorage.setItem('goalsToSync', '')
@@ -244,3 +246,4 @@ $ ->
     assert.equal 1, $("#test1").attr("data-variant-slot")
     xander.updateVariant()
     assert.equal 1, $("#test1").attr("data-variant-slot")
+
