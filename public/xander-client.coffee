@@ -311,7 +311,7 @@ class XanderClient
     url += "&user=#{encodeURIComponent(@uuid())}"
     url += "&apiKey=#{@_apiKey}" if @_apiKey
     url += "&variantType=#{@variantType}" if @variantType
-    url += "&referrel=#{encodeURIComponent(document.referrel)}" if document.referrel
+    url += "&referral=#{encodeURIComponent(document.referral)}" if document.referral
     url += "&experiment=#{encodeURIComponent(@experiment)}" if @experiment
     url
 
@@ -323,7 +323,7 @@ class XanderClient
     url += "&chosen=#{encodeURIComponent(@stringify(@variant()))}"
     url += "&apiKey=#{@_apiKey}" if @_apiKey
     url += "&variantType=#{@variantType}" if @variantType
-    url += "&referrel=#{encodeURIComponent(document.referrel)}" if document.referrel
+    url += "&referral=#{encodeURIComponent(document.referral)}" if document.referral
     url += "&experiment=#{encodeURIComponent(@experiment)}" if @experiment
     url
 

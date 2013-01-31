@@ -103,17 +103,17 @@ $ ->
 
   test "Goal tracking should have uuid.", ->
     xander.experiment = 'test'
-    document.referrel = 'test'
+    document.referral = 'test'
     xander.apiKey("test")
     ok /user=/.test(xander.trackingPixelGoalPath('test')), "Goal Tracking pixel doesn't include user token"
     ok /goal=/.test(xander.trackingPixelGoalPath('test')), "Goal Tracking pixel doesn't include goal"
     ok /apiKey=/.test(xander.trackingPixelGoalPath('test')), "Tracking pixel doesn't include api key"
-    ok /referrel=/.test(xander.trackingPixelGoalPath('test')), "Tracking pixel doesn't include referrel"
+    ok /referral=/.test(xander.trackingPixelGoalPath('test')), "Tracking pixel doesn't include referral"
     ok /experiment=test/.test(xander.trackingPixelGoalPath('test')), "Tracking pixel doesn't include experiment"
 
   test "Tracking pixel path should include relevant information", ->
     xander.experiment = 'test'
-    document.referrel = 'test'
+    document.referral = 'test'
     xander.apiKey("test")
     ok /url=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include URL"
     ok /chosen=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include chosen variants"
