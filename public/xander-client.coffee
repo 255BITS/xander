@@ -311,6 +311,8 @@ class XanderClient
     url += "&user=#{encodeURIComponent(@uuid())}"
     url += "&apiKey=#{@_apiKey}" if @_apiKey
     url += "&variantType=#{@variantType}" if @variantType
+    url += "&referrel=#{encodeURIComponent(document.referrel)}" if document.referrel
+    url += "&experiment=#{encodeURIComponent(@experiment)}" if @experiment
     url
 
   trackingPixelGoalPath : (goal) ->
@@ -321,6 +323,8 @@ class XanderClient
     url += "&chosen=#{encodeURIComponent(@stringify(@variant()))}"
     url += "&apiKey=#{@_apiKey}" if @_apiKey
     url += "&variantType=#{@variantType}" if @variantType
+    url += "&referrel=#{encodeURIComponent(document.referrel)}" if document.referrel
+    url += "&experiment=#{encodeURIComponent(@experiment)}" if @experiment
     url
 
   # UseVariant is expected to be called before $(document).ready by xander.io

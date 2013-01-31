@@ -102,17 +102,26 @@ $ ->
     ok xander.addTrackingPixel() == false, "Tracking pixel has become omnipresent!!"
 
   test "Goal tracking should have uuid.", ->
+    xander.experiment = 'test'
+    document.referrel = 'test'
+    xander.apiKey("test")
     ok /user=/.test(xander.trackingPixelGoalPath('test')), "Goal Tracking pixel doesn't include user token"
-    ok /goal=/.test(xander.trackingPixelGoalPath('test')), "Goal Tracking pixel doesn't include user token"
-    ok /apiKey=/.test(xander.trackingPixelGoalPath('test')), "Tracking pixel doesn't include user token"
+    ok /goal=/.test(xander.trackingPixelGoalPath('test')), "Goal Tracking pixel doesn't include goal"
+    ok /apiKey=/.test(xander.trackingPixelGoalPath('test')), "Tracking pixel doesn't include api key"
+    ok /referrel=/.test(xander.trackingPixelGoalPath('test')), "Tracking pixel doesn't include referrel"
+    ok /experiment=test/.test(xander.trackingPixelGoalPath('test')), "Tracking pixel doesn't include experiment"
 
   test "Tracking pixel path should include relevant information", ->
+    xander.experiment = 'test'
+    document.referrel = 'test'
+    xander.apiKey("test")
     ok /url=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include URL"
     ok /chosen=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include chosen variants"
     ok /all=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include variant options"
     ok /goals=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include goals"
     ok /user=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include user token"
-    ok /apiKey=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include user token"
+    ok /apiKey=/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include api key"
+    ok /experiment=test/.test(xander.trackingPixelPath()), "Tracking pixel doesn't include experiment"
 
   # useVariant takes a hashmap and specifically uses a variant, even through rerolls (unless forced).
   #
