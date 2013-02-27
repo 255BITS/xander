@@ -216,6 +216,8 @@ class XanderClient
       slot = parseInt($(x).attr('data-variant-slot'), 10)
       title = @titleFor(x)
       _gaq?.push ['_setCustomVar', slot, title,  chosen, 2 ] if slot <= 5 # Google Analytics only supports 5 custom variables. 
+    _gaq?.push(['_trackEvent', 'xander', 'variants chosen'])
+
 
   # This rerolls the page into any variant except the current one
   # This is more useful for demo or testing than prod.
@@ -323,7 +325,7 @@ class XanderClient
     url += "&chosen=#{encodeURIComponent(@stringify(@variant()))}"
     url += "&apiKey=#{@_apiKey}" if @_apiKey
     url += "&variantType=#{@variantType}" if @variantType
-    url += "&referral=#{encodeURIComponent(document.referrer)}" if document.referrer
+    url += "&referral=#{encodeURIComponent(document.referrer)}" if document.referrer 
     url += "&experiment=#{encodeURIComponent(@experiment)}" if @experiment
     url
 
